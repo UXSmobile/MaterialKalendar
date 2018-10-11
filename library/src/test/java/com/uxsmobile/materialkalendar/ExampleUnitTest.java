@@ -1,4 +1,4 @@
-package com.uxsmobile.library;
+package com.uxsmobile.materialkalendar;
 
 import org.junit.Test;
 

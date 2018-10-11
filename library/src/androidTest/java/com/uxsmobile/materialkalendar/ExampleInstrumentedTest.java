@@ -1,4 +1,4 @@
-package com.uxsmobile.library;
+package com.uxsmobile.materialkalendar;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -1,0 +1,36 @@
+ext {
+    minSdkVersion = 21
+    compileSdkVersion = 28
+    targetSdkVersion = 28
+    versionMajor = 0
+    versionMinor = 1
+    versionPatch = 0
+    versionClassifier = null
+    isSnapshot = true
+
+    junitVersion = '4.12'
+    runnerVersion = '1.0.2'
+    supportVersion = '28.0.0'
+
+    kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.ext.kotlin_version"
+
+    supportV4 = "com.android.support:support-v4:$supportVersion"
+    supportDesign = "com.android.support:design:$supportVersion"
+    supportAnnotations = "com.android.support:support-annotations:$supportVersion"
+    supportAppCompat = "com.android.support:appcompat-v7:$supportVersion"
+    recyclerviewV7 = "com.android.support:recyclerview-v7:$supportVersion"
+
+    // Test
+    junit = "junit:junit:$junitVersion"
+    testRunner = "com.android.support.test:runner:$runnerVersion"
+    testRules = "com.android.support.test:rules:$runnerVersion"
+
+    // Other
+    threeTenAbp = 'com.jakewharton.threetenabp:threetenabp:1.1.0'
+
+    testDep = [junit]
+
+    androidTestDep = [junit,
+                      testRunner,
+                      testRules]
+}
