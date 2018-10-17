@@ -5,9 +5,11 @@ import kotlinx.android.parcel.Parcelize
 import org.threeten.bp.LocalDate
 
 /**
- * @author   Daniel Manrique <daniel.manrique@uxsmobile.com>
+ * @author   Daniel Manrique Lucas <daniel.manrique@uxsmobile.com>
  * @version  1
  * @since    10/10/2018.
+ *
+ * Copyright © 2018 UXS Mobile. All rights reserved.
  */
 @Parcelize
 data class KalendarDay(val date: LocalDate) : Parcelable {

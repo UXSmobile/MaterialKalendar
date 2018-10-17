@@ -16,9 +16,11 @@ import kotlinx.android.synthetic.main.view_calendar_day.view.dayMovementsBarChar
 import kotlinx.android.synthetic.main.view_calendar_day.view.dayNumber
 
 /**
- * @author   Daniel Manrique <daniel.manrique@uxsmobile.com>
+ * @author   Daniel Manrique Lucas <daniel.manrique@uxsmobile.com>
  * @version  1
  * @since    16/10/2018.
+ *
+ * Copyright © 2018 UXS Mobile. All rights reserved.
  */
 class KalendarDayView
 @JvmOverloads constructor(context: Context,

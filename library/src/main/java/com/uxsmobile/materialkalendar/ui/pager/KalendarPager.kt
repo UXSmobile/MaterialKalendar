@@ -7,9 +7,11 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 
 /**
- * @author   Daniel Manrique <daniel.manrique@uxsmobile.com>
+ * @author   Daniel Manrique Lucas <daniel.manrique@uxsmobile.com>
  * @version  1
  * @since    10/10/2018.
+ *
+ * Copyright © 2018 UXS Mobile. All rights reserved.
  */
 class KalendarPager: ViewPager {
 
