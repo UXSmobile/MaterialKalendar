@@ -21,6 +21,9 @@ data class KalendarDay(val date: LocalDate) : Parcelable {
         fun from(year: Int, month: Int, day: Int) = KalendarDay(
                 LocalDate.of(year, month, day))
 
+        @JvmStatic
+        fun from(date: LocalDate) = from(date.year, date.monthValue, date.dayOfMonth)
+
     }
 
     fun isBefore(dateToCompare: KalendarDay) = date.isBefore(dateToCompare.date)
