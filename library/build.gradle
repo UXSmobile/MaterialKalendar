@@ -27,10 +27,13 @@ androidExtensions {
 dependencies {
     implementation rootProject.ext.kotlin
 
-    implementation rootProject.ext.threeTenAbp
     implementation rootProject.ext.supportV4
     implementation rootProject.ext.supportAppCompat
     implementation rootProject.ext.supportAnnotations
+
+    implementation rootProject.ext.threeTenAbp
+    implementation rootProject.ext.mpAndroidChart
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
     rootProject.ext.testDep.each { testImplementation it }
     rootProject.ext.androidTestDep.each { androidTestImplementation it }

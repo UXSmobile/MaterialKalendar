@@ -27,6 +27,7 @@ ext {
 
     // Other
     threeTenAbp = 'com.jakewharton.threetenabp:threetenabp:1.1.0'
+    mpAndroidChart = 'com.github.PhilJay:MPAndroidChart:v3.0.3'
 
     testDep = [junit]
 
