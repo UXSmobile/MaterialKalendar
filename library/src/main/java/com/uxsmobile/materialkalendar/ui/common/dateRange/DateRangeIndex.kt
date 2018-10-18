@@ -1,4 +1,4 @@
-package com.uxsmobile.materialkalendar.ui.common
+package com.uxsmobile.materialkalendar.ui.common.dateRange
 
 import com.uxsmobile.materialkalendar.data.KalendarDay
 
