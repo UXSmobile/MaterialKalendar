@@ -33,7 +33,7 @@ data class KalendarDay(val date: LocalDate) : Parcelable {
     fun isAfter(dateToCompare: KalendarDay) = date.isAfter(dateToCompare.date)
 
     fun isInDateRange(minDayRange: KalendarDay, maxDayRange: KalendarDay) : Boolean {
-        return !minDayRange.isAfter(this) && !maxDayRange.isBefore(this)
+        return !minDayRange?.isAfter(this) && !maxDayRange.isBefore(this)
     }
 
 }
