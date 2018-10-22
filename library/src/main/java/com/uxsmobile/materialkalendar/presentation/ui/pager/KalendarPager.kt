@@ -1,4 +1,4 @@
-package com.uxsmobile.materialkalendar.ui.pager
+package com.uxsmobile.materialkalendar.presentation.ui.pager
 
 import android.annotation.SuppressLint
 import android.content.Context

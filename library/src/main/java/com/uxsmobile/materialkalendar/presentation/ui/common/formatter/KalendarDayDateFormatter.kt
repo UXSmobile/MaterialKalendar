@@ -1,4 +1,4 @@
-package com.uxsmobile.materialkalendar.ui.common.formatter
+package com.uxsmobile.materialkalendar.presentation.ui.common.formatter
 
 import com.uxsmobile.materialkalendar.data.KalendarDay
 import org.threeten.bp.format.DateTimeFormatter

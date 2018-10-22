@@ -1,20 +1,20 @@
-package com.uxsmobile.materialkalendar.ui
+package com.uxsmobile.materialkalendar.presentation.ui
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Typeface
 import android.support.v4.content.ContextCompat
+import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
-import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.uxsmobile.library.R
+import com.uxsmobile.materialkalendar.app.random
 import com.uxsmobile.materialkalendar.data.KalendarDay
 import com.uxsmobile.materialkalendar.data.KalendarDayViewData
-import com.uxsmobile.materialkalendar.ui.common.formatter.DateFormatter
+import com.uxsmobile.materialkalendar.presentation.ui.common.formatter.DateFormatter
+import com.uxsmobile.materialkalendar.presentation.ui.common.formatter.KalendarDayDateFormatter
 import kotlinx.android.synthetic.main.view_calendar_day.view.dayMovementsBarChart
 import kotlinx.android.synthetic.main.view_calendar_day.view.dayNumber
 
@@ -25,16 +25,17 @@ import kotlinx.android.synthetic.main.view_calendar_day.view.dayNumber
  *
  * Copyright © 2018 UXS Mobile. All rights reserved.
  */
-@SuppressLint("ViewConstructor")
-class KalendarDayView(context: Context,
-                      var day: KalendarDay) : FrameLayout(context) {
+class KalendarDayView
+@JvmOverloads constructor(context: Context,
+                          var day: KalendarDay,
+                          attrs: AttributeSet? = null,
+                          defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
 
     private val colorResources = listOf(R.color.bar_chart_incomes_type,
                                         R.color.bar_chart_expenses_type,
                                         R.color.bar_chart_expected_type)
 
-    private lateinit var formatter: DateFormatter<KalendarDay>
-
+    private var formatter: DateFormatter<KalendarDay> = KalendarDayDateFormatter()
     private var isInMonth = true
     private var isInRange = true
     private var colorPalette = emptyList<Int>()
@@ -53,6 +54,7 @@ class KalendarDayView(context: Context,
 
         dayNumber.apply {
             text = formatter.format(this@KalendarDayView.day)
+            setCheckedDay(day.isToday())
         }
     }
 
@@ -82,7 +84,7 @@ class KalendarDayView(context: Context,
                     setDrawValues(false)
                 })
             }
-            animateY(1000, Easing.EasingOption.EaseOutBounce)
+            //animateY(2000, Easing.EasingOption.EaseOutBounce)
         }
     }
 
@@ -115,19 +117,19 @@ class KalendarDayView(context: Context,
     }
 
     private fun setEnabled() {
-        var dayShouldBeEnabled = isInMonth && isInRange
-
-        if (!isInMonth) {
-            dayShouldBeEnabled = true
-        }
+        var dayShouldBeEnabled = isInRange
 
         if (!isInRange) {
             dayShouldBeEnabled = dayShouldBeEnabled or isInMonth
         }
 
         if (!isInMonth && dayShouldBeEnabled) {
-            dayNumber.setTextColor(Color.GRAY)
+            dayShouldBeEnabled = false
+        } else {
+            dayMovementsBarChart.visibility = View.VISIBLE
+            applyBarChartData(KalendarDayViewData((0..2).map { (0..1).random() }))
         }
+
         visibility = if (dayShouldBeEnabled) View.VISIBLE else View.INVISIBLE
     }
 

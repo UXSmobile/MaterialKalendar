@@ -1,4 +1,4 @@
-package com.uxsmobile.materialkalendar.ui.common.formatter
+package com.uxsmobile.materialkalendar.presentation.ui.common.formatter
 
 /**
  * @author   Daniel Manrique Lucas <daniel.manrique@uxsmobile.com>

@@ -1,10 +1,10 @@
-package com.uxsmobile.materialkalendar.ui.pager
+package com.uxsmobile.materialkalendar.presentation.ui.pager
 
-import android.view.View
 import com.uxsmobile.materialkalendar.data.KalendarDay
-import com.uxsmobile.materialkalendar.ui.KalendarMonthView
-import com.uxsmobile.materialkalendar.ui.common.dateRange.DateRangeIndex
-import com.uxsmobile.materialkalendar.ui.common.dateRange.MonthlyDateRange
+import com.uxsmobile.materialkalendar.presentation.ui.KalendarMonthView
+import com.uxsmobile.materialkalendar.presentation.ui.MaterialKalendar
+import com.uxsmobile.materialkalendar.presentation.ui.common.dateRange.DateRangeIndex
+import com.uxsmobile.materialkalendar.presentation.ui.common.dateRange.MonthlyDateRange
 import org.threeten.bp.DayOfWeek
 
 /**
@@ -14,11 +14,11 @@ import org.threeten.bp.DayOfWeek
  *
  * Copyright © 2018 UXS Mobile. All rights reserved.
  */
-class KalendarMonthPagerAdapter(private val materialKalendar: View): KalendarPagerAdapter<KalendarMonthView>() {
+class KalendarMonthPagerAdapter(private val materialKalendar: MaterialKalendar): KalendarPagerAdapter<KalendarMonthView>() {
 
     override fun createView(position: Int): KalendarMonthView = KalendarMonthView(materialKalendar,
                                                                                   getItem(position),
-                                                                                  DayOfWeek.FRIDAY /*To be changed*/)
+                                                                                  DayOfWeek.MONDAY /*To be changed*/)
 
     override fun indexOf(view: KalendarMonthView, dateRangeIndex: DateRangeIndex?): Int = getRangeIndex()?.indexOf(view.firstDayToShow) ?: 0
 

@@ -1,12 +1,13 @@
-package com.uxsmobile.materialkalendar.ui
+package com.uxsmobile.materialkalendar.presentation.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.support.v7.widget.AppCompatTextView
 import android.view.Gravity
 import android.view.View
-import com.uxsmobile.materialkalendar.ui.common.formatter.DateFormatter
-import com.uxsmobile.materialkalendar.ui.common.formatter.KalendarWeekDayDateFormatter
+import com.uxsmobile.materialkalendar.presentation.ui.common.formatter.DateFormatter
+import com.uxsmobile.materialkalendar.presentation.ui.common.formatter.KalendarWeekDayDateFormatter
 import org.threeten.bp.DayOfWeek
 
 /**
@@ -34,6 +35,7 @@ class KalendarWeekDayView(context: Context,
     fun setDayOfWeek(weekDay: DayOfWeek) {
         this.weekDay = weekDay
         text = formatter.format(weekDay)
+        setTextColor(Color.WHITE)
     }
 
 }
