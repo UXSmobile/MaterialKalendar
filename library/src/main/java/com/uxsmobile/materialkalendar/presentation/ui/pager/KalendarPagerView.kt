@@ -3,6 +3,8 @@ package com.uxsmobile.materialkalendar.presentation.ui.pager
 import android.view.View
 import android.view.ViewGroup
 import com.uxsmobile.materialkalendar.app.dpToPx
+import com.uxsmobile.materialkalendar.app.safeLet
+import com.uxsmobile.materialkalendar.app.shouldShowNonCurrentMonths
 import com.uxsmobile.materialkalendar.data.KalendarDay
 import com.uxsmobile.materialkalendar.presentation.ui.KalendarDayView
 import com.uxsmobile.materialkalendar.presentation.ui.KalendarWeekDayView
@@ -31,6 +33,11 @@ abstract class KalendarPagerView(private val materialKalendar: MaterialKalendar,
 
     private val dayViews = mutableListOf<KalendarDayView>()
     private val weekDayViews = mutableListOf<KalendarWeekDayView>()
+
+    private var minDate: KalendarDay? = null
+    private var maxDate: KalendarDay? = null
+
+    private var showDateFlagsMode = MaterialKalendar.ShowingDateModes.DEFAULT
 
     init {
         clipChildren = false
@@ -90,15 +97,36 @@ abstract class KalendarPagerView(private val materialKalendar: MaterialKalendar,
         }
     }
 
+    fun setMinimumDate(minDate: KalendarDay) {
+        this.minDate = minDate
+        refreshUi()
+    }
+
+    fun setMaximumDate(maxDate: KalendarDay) {
+        this.maxDate = maxDate
+        refreshUi()
+    }
+
+    fun setShowingDatesMode(mode: MaterialKalendar.ShowingDateModes) {
+        showDateFlagsMode = mode
+        refreshUi()
+    }
+
     fun setWeekDayFormatter(formatter: DateFormatter<DayOfWeek>) {
         weekDayViews.forEach {
             it.setWeekDayFormatter(formatter)
         }
     }
 
-    fun applyDateRange(minDate: KalendarDay, maxDate: KalendarDay = KalendarDay.today()) {
+    private fun refreshUi() {
+        safeLet(minDate, maxDate) { first, second ->
+            updateDateRange(first, second)
+        }
+    }
+
+    private fun updateDateRange(minDate: KalendarDay, maxDate: KalendarDay = KalendarDay.today()) {
         dayViews.forEach {
-            it.setupSelection(it.day.isInDateRange(minDate, maxDate), isDayEnabled(it.day))
+            it.setupDayShowingMode(showDateFlagsMode, it.day.isInDateRange(minDate, maxDate), isDayEnabled(it.day))
         }
         postInvalidate()
     }
@@ -139,7 +167,8 @@ abstract class KalendarPagerView(private val materialKalendar: MaterialKalendar,
         val temp = firstDayToShow.date.with(firstDayOfWeek, 1)
         val dayOfWeek = temp.dayOfWeek.value
         var delta = firstWeekDay.value - dayOfWeek
-        if (delta > 0) {
+        val removeRow = if (showDateFlagsMode.shouldShowNonCurrentMonths()) delta >= 0 else delta > 0
+        if (removeRow) {
             delta -= DEFAULT_DAYS_IN_WEEK
         }
         return temp.plusDays(delta.toLong())

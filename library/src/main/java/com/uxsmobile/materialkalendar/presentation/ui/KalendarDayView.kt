@@ -1,6 +1,7 @@
 package com.uxsmobile.materialkalendar.presentation.ui
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Typeface
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
@@ -12,6 +13,10 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.uxsmobile.library.R
 import com.uxsmobile.materialkalendar.app.random
+import com.uxsmobile.materialkalendar.app.shouldShowAllDates
+import com.uxsmobile.materialkalendar.app.shouldShowDefaultDates
+import com.uxsmobile.materialkalendar.app.shouldShowNonCurrentMonths
+import com.uxsmobile.materialkalendar.app.shouldShowOutOfCalendarRangeDates
 import com.uxsmobile.materialkalendar.data.KalendarDay
 import com.uxsmobile.materialkalendar.data.KalendarDayViewData
 import com.uxsmobile.materialkalendar.presentation.ui.common.formatter.DateFormatter
@@ -36,9 +41,8 @@ class KalendarDayView
                                         R.color.bar_chart_expected_type)
 
     lateinit var day: KalendarDay
+
     private var formatter: DateFormatter<KalendarDay> = KalendarDayDateFormatter()
-    private var isInMonth = true
-    private var isInRange = true
     private var colorPalette = emptyList<Int>()
 
     init {
@@ -71,24 +75,43 @@ class KalendarDayView
         if (checked) dayNumber.typeface = Typeface.DEFAULT_BOLD else Typeface.DEFAULT
     }
 
-    fun setupSelection(inRange: Boolean, inMonth: Boolean) {
-        isInMonth = inMonth
-        isInRange = inRange
-        setEnabled()
+    fun setupDayShowingMode(mode: MaterialKalendar.ShowingDateModes, inRange: Boolean, inMonth: Boolean) {
+        var dayShouldBeEnabled = inMonth && inRange
+
+        if (mode.shouldShowAllDates()) {
+            dayShouldBeEnabled = true
+        } else {
+            if (!inMonth && mode.shouldShowNonCurrentMonths()) dayShouldBeEnabled = true
+
+            if (!inRange && mode.shouldShowOutOfCalendarRangeDates()) dayShouldBeEnabled = dayShouldBeEnabled or inMonth
+
+            if (mode.shouldShowDefaultDates()) dayShouldBeEnabled = dayShouldBeEnabled.or(inMonth && inRange)
+
+            if (!inMonth && dayShouldBeEnabled) {
+                dayNumber.setTextColor(Color.GRAY)
+            }
+        }
+
+        visibility = if (dayShouldBeEnabled) {
+            applyBarChartData(KalendarDayViewData((0..2).map { (0..1).random() }), !inMonth)
+            performBarChartVerticalAnimation()
+            View.VISIBLE
+        } else {
+            View.INVISIBLE
+        }
     }
 
-    fun applyBarChartData(dataSet: KalendarDayViewData) {
+    fun applyBarChartData(dataSet: KalendarDayViewData, applyGrayScaleColorScheme: Boolean = false) {
         dayMovementsBarChart.apply {
             data = BarData().apply {
                 addDataSet(BarDataSet(
                         dataSet.barChartValues.mapIndexed { index, value -> BarEntry(index.toFloat(), value) },
                         "").apply {
                     barWidth = .9f
-                    colors = colorPalette
+                    colors = if (applyGrayScaleColorScheme) listOf(Color.GRAY, Color.GRAY, Color.GRAY )else colorPalette
                     setDrawValues(false)
                 })
             }
-
         }
     }
 
@@ -124,24 +147,6 @@ class KalendarDayView
             description.isEnabled = false
             setViewPortOffsets(0f, 0f, 0f, 0f)
         }
-    }
-
-    private fun setEnabled() {
-        var dayShouldBeEnabled = isInRange
-
-        if (!isInRange) {
-            dayShouldBeEnabled = dayShouldBeEnabled or isInMonth
-        }
-
-        if (!isInMonth && dayShouldBeEnabled) {
-            dayShouldBeEnabled = false
-        } else {
-            dayMovementsBarChart.visibility = View.VISIBLE
-            applyBarChartData(KalendarDayViewData((0..2).map { (0..1).random() }))
-            performBarChartVerticalAnimation()
-        }
-
-        visibility = if (dayShouldBeEnabled) View.VISIBLE else View.INVISIBLE
     }
 
 }

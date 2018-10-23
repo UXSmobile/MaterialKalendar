@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:background="@drawable/bg_riders_blur"
               android:orientation="vertical">
 
@@ -9,6 +10,10 @@
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:mk_showingModes="non_current_months"
+        app:mk_allowClickDaysOutsideCurrentMonth="true"
+        app:mk_firstDayOfWeek="monday"
+        app:mk_showWeekDayLabels="true"
         />
 
     <TextView

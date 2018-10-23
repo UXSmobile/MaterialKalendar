@@ -4,6 +4,7 @@ import android.support.v4.view.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
 import com.uxsmobile.materialkalendar.data.KalendarDay
+import com.uxsmobile.materialkalendar.presentation.ui.MaterialKalendar
 import com.uxsmobile.materialkalendar.presentation.ui.common.dateRange.DateRangeIndex
 import com.uxsmobile.materialkalendar.presentation.ui.common.formatter.DateFormatter
 import com.uxsmobile.materialkalendar.presentation.ui.common.formatter.KalendarWeekDayDateFormatter
@@ -16,6 +17,7 @@ import org.threeten.bp.DayOfWeek
  *
  * Copyright © 2018 UXS Mobile. All rights reserved.
  */
+@Suppress("UNCHECKED_CAST")
 abstract class KalendarPagerAdapter<V : KalendarPagerView> : PagerAdapter() {
 
     private val currentViews = arrayListOf<V>()
@@ -24,6 +26,7 @@ abstract class KalendarPagerAdapter<V : KalendarPagerView> : PagerAdapter() {
     private lateinit var minDate: KalendarDay
     private lateinit var maxDate: KalendarDay
 
+    private var showDateFlagsMode = MaterialKalendar.ShowingDateModes.DEFAULT
     private var weekDayFormatter: DateFormatter<DayOfWeek> = KalendarWeekDayDateFormatter()
 
     private var rangeIndex: DateRangeIndex? = null
@@ -45,7 +48,9 @@ abstract class KalendarPagerAdapter<V : KalendarPagerView> : PagerAdapter() {
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val pagerView = createView(position).apply {
             setWeekDayFormatter(weekDayFormatter)
-            applyDateRange(minDate, maxDate)
+            setShowingDatesMode(showDateFlagsMode)
+            setMinimumDate(minDate)
+            setMaximumDate(maxDate)
         }
 
         container.addView(pagerView)
@@ -76,7 +81,8 @@ abstract class KalendarPagerAdapter<V : KalendarPagerView> : PagerAdapter() {
 
         currentViews.forEach {
             it.apply {
-                applyDateRange(minDate, maxDate)
+                setMinimumDate(minDate)
+                setMaximumDate(maxDate)
             }
         }
 
@@ -91,6 +97,14 @@ abstract class KalendarPagerAdapter<V : KalendarPagerView> : PagerAdapter() {
             if (kalendarDay.isAfter(maxDate)) return count - 1
             return rangeIndex?.indexOf(day) ?: count / 2
         } ?: return count / 2
+    }
+
+    fun setShowingDatesMode(mode: MaterialKalendar.ShowingDateModes) {
+        showDateFlagsMode = mode
+
+        currentViews.forEach {
+            it.setShowingDatesMode(mode)
+        }
     }
 
     fun setWeekDayFormatter(formatter: DateFormatter<DayOfWeek>) {

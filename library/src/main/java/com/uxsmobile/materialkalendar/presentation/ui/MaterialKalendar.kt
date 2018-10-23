@@ -38,6 +38,13 @@ class MaterialKalendar
         private const val INVALID_TILE_DIMENSION = -10
     }
 
+    enum class ShowingDateModes(val value: Int) {
+        NON_CURRENT_MODES(1),
+        OUT_OF_CALENDAR_DATE_RANGE(1 shl 1),
+        DEFAULT(1 shl 2),
+        ALL(NON_CURRENT_MODES.value or OUT_OF_CALENDAR_DATE_RANGE.value or DEFAULT.value)
+    }
+
     private val pageChangeListener = object : ViewPager.OnPageChangeListener {
         override fun onPageScrollStateChanged(state: Int) {
         }
@@ -109,19 +116,23 @@ class MaterialKalendar
                 setWeekDayFormatter(ArrayKalendarWeekDayDateFormatter(weekLabelsArray))
             }
 
+            when (a.getInteger(R.styleable.MaterialKalendar_mk_showingModes, ShowingDateModes.DEFAULT.value)) {
+                ShowingDateModes.NON_CURRENT_MODES.value -> setShowingDatesMode(ShowingDateModes.NON_CURRENT_MODES)
+                ShowingDateModes.OUT_OF_CALENDAR_DATE_RANGE.value -> setShowingDatesMode(ShowingDateModes.OUT_OF_CALENDAR_DATE_RANGE)
+                ShowingDateModes.DEFAULT.value -> setShowingDatesMode(ShowingDateModes.DEFAULT)
+                ShowingDateModes.ALL.value -> setShowingDatesMode(ShowingDateModes.ALL)
+                else -> { }
+            }
+
             //setWeekDayTextAppearance(a.getResourceId(R.styleable.MaterialKalendar_mk_weekDayTextAppearance, R.style.TextAppearance_MaterialKalendarWidget_WeekDay))
 
-
-            setAllowClickDaysOutsideCurrentMonth(
-                    a.getBoolean(R.styleable.MaterialKalendar_mk_allowClickDaysOutsideCurrentMonth,
-                                 true))
+            setAllowClickDaysOutsideCurrentMonth(a.getBoolean(R.styleable.MaterialKalendar_mk_allowClickDaysOutsideCurrentMonth, true))
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
             a.recycle()
         }
 
-        // Adapter is created while parsing the TypedArray attrs, so setup has to happen after
         setupChildren()
 
         currentDay = KalendarDay.today()
@@ -134,13 +145,9 @@ class MaterialKalendar
         val specHeightSize = View.MeasureSpec.getSize(heightMeasureSpec)
         val specHeightMode = View.MeasureSpec.getMode(heightMeasureSpec)
 
-        //We need to disregard padding for a while. This will be added back later
         val desiredWidth = specWidthSize - paddingLeft - paddingRight
         val desiredHeight = specHeightSize - paddingTop - paddingBottom
 
-        val weekCount = getWeekCount()
-
-        //Calculate independent tile sizes for later
         val desiredTileWidth = Math.round((desiredWidth / DEFAULT_DAYS_IN_WEEK).toFloat())
         val desiredTileHeight = Math.round((desiredHeight / DEFAULT_MAX_WEEKS).toFloat())
 
@@ -150,65 +157,49 @@ class MaterialKalendar
 
         if (this.tileWidth != INVALID_TILE_DIMENSION || this.tileHeight != INVALID_TILE_DIMENSION) {
             measureTileWidth = if (this.tileWidth > 0) {
-                //We have a tileWidth set, we should use that
                 this.tileWidth
             } else {
                 desiredTileWidth
             }
             measureTileHeight = if (this.tileHeight > 0) {
-                //We have a tileHeight set, we should use that
                 this.tileHeight
             } else {
                 desiredTileHeight
             }
         } else if (specWidthMode == View.MeasureSpec.EXACTLY || specWidthMode == View.MeasureSpec.AT_MOST) {
             measureTileSize = if (specHeightMode == View.MeasureSpec.EXACTLY) {
-                //Pick the smaller of the two explicit sizes
                 Math.min(desiredTileWidth, desiredTileHeight)
             } else {
-                //Be the width size the user wants
                 desiredTileWidth
             }
         } else if (specHeightMode == View.MeasureSpec.EXACTLY || specHeightMode == View.MeasureSpec.AT_MOST) {
-            //Be the height size the user wants
             measureTileSize = desiredTileHeight
         }
 
         if (measureTileSize > 0) {
-            //Use measureTileSize if set
             measureTileHeight = measureTileSize
             measureTileWidth = measureTileSize
         } else if (measureTileSize <= 0) {
             if (measureTileWidth <= 0) {
-                //Set width to default if no value were set
                 measureTileWidth = DEFAULT_TILE_SIZE_DP.dpToPx()
             }
             if (measureTileHeight <= 0) {
-                //Set height to default if no value were set
                 measureTileHeight = DEFAULT_TILE_SIZE_DP.dpToPx()
             }
         }
 
-        //Calculate our size based off our measured tile size
         var measuredWidth = measureTileWidth * DEFAULT_DAYS_IN_WEEK
         var measuredHeight = (measureTileHeight + 8.dpToPx()) * (DEFAULT_MAX_WEEKS + DEFAULT_WEEK_DAYS_ROW)
 
-        //Put padding back in from when we took it away
         measuredWidth += paddingLeft + paddingRight
         measuredHeight += paddingTop + paddingBottom
 
-        //Contract fulfilled, setting out measurements
-        setMeasuredDimension(
-                //We clamp inline because we want to use un-clamped versions on the children
-                clampSize(measuredWidth, widthMeasureSpec),
-                clampSize(measuredHeight, heightMeasureSpec)
-                            )
+        setMeasuredDimension(clampSize(measuredWidth, widthMeasureSpec), clampSize(measuredHeight, heightMeasureSpec))
 
         (0 until childCount).map { getChildAt(it) }.forEach { child ->
             val childWidthMeasureSpec = View.MeasureSpec.makeMeasureSpec(
                     DEFAULT_DAYS_IN_WEEK * measureTileWidth,
-                    View.MeasureSpec.EXACTLY
-                                                                        )
+                    View.MeasureSpec.EXACTLY)
 
             val childHeightMeasureSpec = View.MeasureSpec.makeMeasureSpec(
                     (DEFAULT_MAX_WEEKS + DEFAULT_WEEK_DAYS_ROW) * (measureTileHeight + 8.dpToPx()),
@@ -276,6 +267,10 @@ class MaterialKalendar
 
     fun setTileWidthDp(tileWidthDp: Int) {
         setTileWidth(tileWidthDp.dpToPx())
+    }
+
+    fun setShowingDatesMode(mode: ShowingDateModes) {
+        adapter.setShowingDatesMode(mode)
     }
 
     fun setWeekDayFormatter(formatter: DateFormatter<DayOfWeek>?) {
@@ -372,7 +367,6 @@ class MaterialKalendar
             }
         }
     }
-
 
     interface OnDateSelectedListener {
 
