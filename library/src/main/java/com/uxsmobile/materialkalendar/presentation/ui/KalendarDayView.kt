@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
+import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
@@ -27,7 +28,6 @@ import kotlinx.android.synthetic.main.view_calendar_day.view.dayNumber
  */
 class KalendarDayView
 @JvmOverloads constructor(context: Context,
-                          var day: KalendarDay,
                           attrs: AttributeSet? = null,
                           defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
 
@@ -35,6 +35,7 @@ class KalendarDayView
                                         R.color.bar_chart_expenses_type,
                                         R.color.bar_chart_expected_type)
 
+    lateinit var day: KalendarDay
     private var formatter: DateFormatter<KalendarDay> = KalendarDayDateFormatter()
     private var isInMonth = true
     private var isInRange = true
@@ -45,8 +46,11 @@ class KalendarDayView
 
         colorPalette = colorResources.map { ContextCompat.getColor(context, it) }
 
-        setDayNumber(day)
         setupBarChart()
+    }
+
+    constructor(context: Context, day: KalendarDay) : this(context) {
+        setDayNumber(day)
     }
 
     fun setDayNumber(day: KalendarDay) {
@@ -84,7 +88,13 @@ class KalendarDayView
                     setDrawValues(false)
                 })
             }
-            //animateY(2000, Easing.EasingOption.EaseOutBounce)
+
+        }
+    }
+
+    fun performBarChartVerticalAnimation() {
+        dayMovementsBarChart.apply {
+            animateY(700, Easing.EasingOption.EaseOutBounce)
         }
     }
 
@@ -128,6 +138,7 @@ class KalendarDayView
         } else {
             dayMovementsBarChart.visibility = View.VISIBLE
             applyBarChartData(KalendarDayViewData((0..2).map { (0..1).random() }))
+            performBarChartVerticalAnimation()
         }
 
         visibility = if (dayShouldBeEnabled) View.VISIBLE else View.INVISIBLE
