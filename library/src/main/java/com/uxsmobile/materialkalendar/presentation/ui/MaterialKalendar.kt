@@ -1,6 +1,7 @@
 package com.uxsmobile.materialkalendar.presentation.ui
 
 import android.content.Context
+import android.support.annotation.IntDef
 import android.support.v4.view.ViewPager
 import android.util.AttributeSet
 import android.view.View
@@ -36,14 +37,18 @@ class MaterialKalendar
         private const val DEFAULT_MAX_WEEKS = 6
         private const val DEFAULT_WEEK_DAYS_ROW = 1
         private const val INVALID_TILE_DIMENSION = -10
+
+        const val SHOWING_MODE_DEFAULT = 1
+        const val SHOWING_MODE_NON_CURRENT_MONTHS = 1 shl 1
+        const val SHOWING_MODE_OUT_OF_CALENDAR_DATE_RANGE = 1 shl 2
+        const val SHOWING_MODE_ALL = SHOWING_MODE_DEFAULT.or(
+                SHOWING_MODE_OUT_OF_CALENDAR_DATE_RANGE.or(SHOWING_MODE_NON_CURRENT_MONTHS))
     }
 
-    enum class ShowingDateModes(val value: Int) {
-        NON_CURRENT_MODES(1),
-        OUT_OF_CALENDAR_DATE_RANGE(1 shl 1),
-        DEFAULT(1 shl 2),
-        ALL(NON_CURRENT_MODES.value or OUT_OF_CALENDAR_DATE_RANGE.value or DEFAULT.value)
-    }
+    @IntDef(flag = true,
+            value = [SHOWING_MODE_DEFAULT, SHOWING_MODE_OUT_OF_CALENDAR_DATE_RANGE, SHOWING_MODE_NON_CURRENT_MONTHS, SHOWING_MODE_ALL])
+    @Retention(AnnotationRetention.SOURCE)
+    annotation class ShowingDateModes
 
     private val pageChangeListener = object : ViewPager.OnPageChangeListener {
         override fun onPageScrollStateChanged(state: Int) {
@@ -71,20 +76,14 @@ class MaterialKalendar
     private var maxDate: KalendarDay? = null
     private var tileHeight: Int = INVALID_TILE_DIMENSION
     private var tileWidth: Int = INVALID_TILE_DIMENSION
+    @ShowingDateModes private var showingDateFlagModes = SHOWING_MODE_DEFAULT
     private var allowClickDaysOutsideCurrentMonth: Boolean = true
+    private var allowDynamicWeeksHeightResize: Boolean = false
+    private var shouldShowWeekDays: Boolean = true
 
     init {
         clipToPadding = false
         clipChildren = false
-
-        adapter = KalendarMonthPagerAdapter(this@MaterialKalendar)
-        pager = KalendarPager(context).apply {
-            addOnPageChangeListener(pageChangeListener)
-            clipToPadding = false
-            setPadding(28.dpToPx(), 0, 28.dpToPx(), 0)
-            pageMargin = (paddingLeft / 1.5).toInt()
-        }
-        pager.adapter = adapter
 
         val a = context.theme.obtainStyledAttributes(attrs, R.styleable.MaterialKalendar, 0, 0)
         try {
@@ -111,27 +110,38 @@ class MaterialKalendar
                 setTileHeight(tileHeight)
             }
 
+            shouldShowWeekDays = a.getBoolean(R.styleable.MaterialKalendar_mk_showWeekDayLabels, true)
+
             val weekLabelsArray: Array<CharSequence>? = a.getTextArray(R.styleable.MaterialKalendar_mk_weekDayLabels)
             weekLabelsArray?.let {
                 setWeekDayFormatter(ArrayKalendarWeekDayDateFormatter(weekLabelsArray))
             }
 
-            when (a.getInteger(R.styleable.MaterialKalendar_mk_showingModes, ShowingDateModes.DEFAULT.value)) {
-                ShowingDateModes.NON_CURRENT_MODES.value -> setShowingDatesMode(ShowingDateModes.NON_CURRENT_MODES)
-                ShowingDateModes.OUT_OF_CALENDAR_DATE_RANGE.value -> setShowingDatesMode(ShowingDateModes.OUT_OF_CALENDAR_DATE_RANGE)
-                ShowingDateModes.DEFAULT.value -> setShowingDatesMode(ShowingDateModes.DEFAULT)
-                ShowingDateModes.ALL.value -> setShowingDatesMode(ShowingDateModes.ALL)
-                else -> { }
-            }
+            showingDateFlagModes = a.getInteger(R.styleable.MaterialKalendar_mk_showingModes,
+                                                SHOWING_MODE_DEFAULT)
 
             //setWeekDayTextAppearance(a.getResourceId(R.styleable.MaterialKalendar_mk_weekDayTextAppearance, R.style.TextAppearance_MaterialKalendarWidget_WeekDay))
 
-            setAllowClickDaysOutsideCurrentMonth(a.getBoolean(R.styleable.MaterialKalendar_mk_allowClickDaysOutsideCurrentMonth, true))
+            setAllowClickDaysOutsideCurrentMonth(
+                    a.getBoolean(R.styleable.MaterialKalendar_mk_allowClickDaysOutsideCurrentMonth, true))
+            setAllowDynamicWeeksHeightResize(
+                    a.getBoolean(R.styleable.MaterialKalendar_mk_allowDynamicWeeksHeightResize, false))
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
             a.recycle()
         }
+
+        adapter = KalendarMonthPagerAdapter(this@MaterialKalendar).apply {
+            setShowingDatesMode(showingDateFlagModes)
+        }
+        pager = KalendarPager(context).apply {
+            addOnPageChangeListener(pageChangeListener)
+            clipToPadding = false
+            setPadding(28.dpToPx(), 0, 28.dpToPx(), 0)
+            pageMargin = (paddingLeft / 1.5).toInt()
+        }
+        pager.adapter = adapter
 
         setupChildren()
 
@@ -148,8 +158,10 @@ class MaterialKalendar
         val desiredWidth = specWidthSize - paddingLeft - paddingRight
         val desiredHeight = specHeightSize - paddingTop - paddingBottom
 
-        val desiredTileWidth = Math.round((desiredWidth / DEFAULT_DAYS_IN_WEEK).toFloat())
-        val desiredTileHeight = Math.round((desiredHeight / DEFAULT_MAX_WEEKS).toFloat())
+        val weeksToShow = getWeekCount()
+
+        val desiredTileWidth = desiredWidth / DEFAULT_DAYS_IN_WEEK
+        val desiredTileHeight = desiredHeight / weeksToShow
 
         var measureTileSize = -1
         var measureTileWidth = -1
@@ -189,7 +201,7 @@ class MaterialKalendar
         }
 
         var measuredWidth = measureTileWidth * DEFAULT_DAYS_IN_WEEK
-        var measuredHeight = (measureTileHeight + 8.dpToPx()) * (DEFAULT_MAX_WEEKS + DEFAULT_WEEK_DAYS_ROW)
+        var measuredHeight = (measureTileHeight + 8.dpToPx()) * (weeksToShow)
 
         measuredWidth += paddingLeft + paddingRight
         measuredHeight += paddingTop + paddingBottom
@@ -202,7 +214,7 @@ class MaterialKalendar
                     View.MeasureSpec.EXACTLY)
 
             val childHeightMeasureSpec = View.MeasureSpec.makeMeasureSpec(
-                    (DEFAULT_MAX_WEEKS + DEFAULT_WEEK_DAYS_ROW) * (measureTileHeight + 8.dpToPx()),
+                    weeksToShow * (measureTileHeight + 8.dpToPx()),
                     View.MeasureSpec.EXACTLY)
 
             child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
@@ -229,6 +241,14 @@ class MaterialKalendar
                     childTop += height
                 }
     }
+
+    override fun shouldDelayChildPressedState(): Boolean {
+        return false
+    }
+
+    fun getFirstDayOfWeek() = firstDayOfWeek
+
+    fun getShouldShowWeekDays() = shouldShowWeekDays
 
     fun setCalendarBounds(minDate: KalendarDay, maxDate: KalendarDay) {
         this.minDate = minDate
@@ -269,8 +289,9 @@ class MaterialKalendar
         setTileWidth(tileWidthDp.dpToPx())
     }
 
-    fun setShowingDatesMode(mode: ShowingDateModes) {
-        adapter.setShowingDatesMode(mode)
+    fun setShowingDatesMode(@MaterialKalendar.ShowingDateModes flagsMode: Int) {
+        showingDateFlagModes = flagsMode
+        adapter.setShowingDatesMode(flagsMode)
     }
 
     fun setWeekDayFormatter(formatter: DateFormatter<DayOfWeek>?) {
@@ -279,6 +300,10 @@ class MaterialKalendar
 
     fun setAllowClickDaysOutsideCurrentMonth(enable: Boolean) {
         allowClickDaysOutsideCurrentMonth = enable
+    }
+
+    fun setAllowDynamicWeeksHeightResize(enable: Boolean) {
+        allowDynamicWeeksHeightResize = enable
     }
 
     fun getCurrentDate(): KalendarDay {
@@ -310,9 +335,13 @@ class MaterialKalendar
     }
 
     private fun getWeekCount(): Int {
-        val cal = adapter.getItem(pager.currentItem).date
-        val tempLastDay = cal.withDayOfMonth(cal.lengthOfMonth())
-        return tempLastDay.get(WeekFields.of(firstDayOfWeek, 1).weekOfMonth())
+        var weekCount = DEFAULT_MAX_WEEKS
+        if (allowDynamicWeeksHeightResize) {
+            val cal = adapter.getItem(pager.currentItem).date
+            val tempLastDay = cal.withDayOfMonth(cal.lengthOfMonth())
+            weekCount = tempLastDay.get(WeekFields.of(firstDayOfWeek, 1).weekOfMonth())
+        }
+        return if (shouldShowWeekDays) weekCount + DEFAULT_WEEK_DAYS_ROW else weekCount
     }
 
     private fun dispatchOnDateSelected(day: KalendarDay) {
@@ -325,7 +354,7 @@ class MaterialKalendar
 
     private fun setupChildren() {
         pager.offscreenPageLimit = 1
-        val tileHeight = DEFAULT_MAX_WEEKS + DEFAULT_WEEK_DAYS_ROW
+        val tileHeight = if (shouldShowWeekDays) DEFAULT_MAX_WEEKS + DEFAULT_WEEK_DAYS_ROW else DEFAULT_MAX_WEEKS
         addView(pager, LayoutParams(LayoutParams.MATCH_PARENT, tileHeight))
     }
 

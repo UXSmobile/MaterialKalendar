@@ -15,16 +15,18 @@ import org.threeten.bp.LocalDate
  */
 @SuppressLint("ViewConstructor")
 class KalendarMonthView(materialKalendarView: MaterialKalendar,
-                       firstDayToShow: KalendarDay,
-                       firstWeekDay: DayOfWeek): KalendarPagerView(materialKalendarView,
-                                                                   firstDayToShow,
-                                                                   firstWeekDay) {
+                        val firstDayToShow: KalendarDay,
+                        firstWeekDay: DayOfWeek,
+                        private val shouldShowWeekDays: Boolean) : KalendarPagerView(materialKalendarView,
+                                                                                     firstDayToShow,
+                                                                                     firstWeekDay,
+                                                                                     shouldShowWeekDays) {
 
-    override fun getRows(): Int = DEFAULT_MAX_WEEKS + DAY_NAMES_ROW
+    override fun getRows(): Int = if (shouldShowWeekDays) DEFAULT_MAX_WEEKS + DAY_NAMES_ROW else DEFAULT_MAX_WEEKS
 
     override fun buildDayViews(dayViews: MutableList<KalendarDayView>, calendar: LocalDate) {
         var tempDate = calendar
-        (0 until DEFAULT_MAX_WEEKS).map {
+        (0 until DEFAULT_MAX_WEEKS).map { _ ->
             (0 until DEFAULT_DAYS_IN_WEEK).map {
                 addDayView(dayViews, tempDate)
                 tempDate = tempDate.plusDays(1)

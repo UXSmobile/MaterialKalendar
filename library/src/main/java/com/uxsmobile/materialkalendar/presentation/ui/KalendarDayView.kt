@@ -75,25 +75,25 @@ class KalendarDayView
         if (checked) dayNumber.typeface = Typeface.DEFAULT_BOLD else Typeface.DEFAULT
     }
 
-    fun setupDayShowingMode(mode: MaterialKalendar.ShowingDateModes, inRange: Boolean, inMonth: Boolean) {
+    fun setupDayShowingMode(flagsMode: Int, inRange: Boolean, inMonth: Boolean) {
         var dayShouldBeEnabled = inMonth && inRange
 
-        if (mode.shouldShowAllDates()) {
+        if (flagsMode.shouldShowAllDates()) {
             dayShouldBeEnabled = true
         } else {
-            if (!inMonth && mode.shouldShowNonCurrentMonths()) dayShouldBeEnabled = true
+            if (!inMonth && flagsMode.shouldShowNonCurrentMonths()) dayShouldBeEnabled = true
 
-            if (!inRange && mode.shouldShowOutOfCalendarRangeDates()) dayShouldBeEnabled = dayShouldBeEnabled or inMonth
+            if (!inRange && flagsMode.shouldShowOutOfCalendarRangeDates()) dayShouldBeEnabled = dayShouldBeEnabled or inMonth
 
-            if (mode.shouldShowDefaultDates()) dayShouldBeEnabled = dayShouldBeEnabled.or(inMonth && inRange)
+            if (flagsMode.shouldShowDefaultDates()) dayShouldBeEnabled = dayShouldBeEnabled.or(inMonth && inRange)
 
-            if (!inMonth && dayShouldBeEnabled) {
+            if ((!inMonth || (inMonth && !inRange)) && dayShouldBeEnabled) {
                 dayNumber.setTextColor(Color.GRAY)
             }
         }
 
         visibility = if (dayShouldBeEnabled) {
-            applyBarChartData(KalendarDayViewData((0..2).map { (0..1).random() }), !inMonth)
+            applyBarChartData(KalendarDayViewData((0..2).map { (0..1).random() }), !inMonth || (inMonth && !inRange))
             performBarChartVerticalAnimation()
             View.VISIBLE
         } else {

@@ -5,7 +5,6 @@ import com.uxsmobile.materialkalendar.presentation.ui.KalendarMonthView
 import com.uxsmobile.materialkalendar.presentation.ui.MaterialKalendar
 import com.uxsmobile.materialkalendar.presentation.ui.common.dateRange.DateRangeIndex
 import com.uxsmobile.materialkalendar.presentation.ui.common.dateRange.MonthlyDateRange
-import org.threeten.bp.DayOfWeek
 
 /**
  * @author   Daniel Manrique Lucas <dmanluc91@gmail.com>
@@ -18,7 +17,8 @@ class KalendarMonthPagerAdapter(private val materialKalendar: MaterialKalendar):
 
     override fun createView(position: Int): KalendarMonthView = KalendarMonthView(materialKalendar,
                                                                                   getItem(position),
-                                                                                  DayOfWeek.MONDAY /*To be changed*/)
+                                                                                  materialKalendar.getFirstDayOfWeek(),
+                                                                                  materialKalendar.getShouldShowWeekDays())
 
     override fun indexOf(view: KalendarMonthView, dateRangeIndex: DateRangeIndex?): Int = getRangeIndex()?.indexOf(view.firstDayToShow) ?: 0
 

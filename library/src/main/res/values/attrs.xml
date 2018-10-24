@@ -7,13 +7,14 @@
         <attr name="mk_weekDayTextAppearance" format="reference"/>
 
         <attr name="mk_showingModes" format="integer">
-            <flag name="non_current_months" value="1"/>
-            <flag name="out_of_calendar_date_range" value="2"/>
-            <flag name="standard" value="4"/>
+            <flag name="standard" value="1"/>
+            <flag name="non_current_months" value="2"/>
+            <flag name="out_of_calendar_date_range" value="4"/>
             <flag name="all" value="7"/>
         </attr>
 
         <attr name="mk_allowClickDaysOutsideCurrentMonth" format="boolean"/>
+        <attr name="mk_allowDynamicWeeksHeightResize" format="boolean"/>
 
         <attr name="mk_showWeekDayLabels" format="boolean"/>
         <attr name="mk_weekDayLabels" format="reference"/>

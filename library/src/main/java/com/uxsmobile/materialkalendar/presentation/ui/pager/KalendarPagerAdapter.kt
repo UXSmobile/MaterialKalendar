@@ -26,9 +26,8 @@ abstract class KalendarPagerAdapter<V : KalendarPagerView> : PagerAdapter() {
     private lateinit var minDate: KalendarDay
     private lateinit var maxDate: KalendarDay
 
-    private var showDateFlagsMode = MaterialKalendar.ShowingDateModes.DEFAULT
+    @MaterialKalendar.ShowingDateModes private var showDateFlagsMode = MaterialKalendar.SHOWING_MODE_DEFAULT
     private var weekDayFormatter: DateFormatter<DayOfWeek> = KalendarWeekDayDateFormatter()
-
     private var rangeIndex: DateRangeIndex? = null
 
     init {
@@ -48,7 +47,7 @@ abstract class KalendarPagerAdapter<V : KalendarPagerView> : PagerAdapter() {
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val pagerView = createView(position).apply {
             setWeekDayFormatter(weekDayFormatter)
-            setShowingDatesMode(showDateFlagsMode)
+            setShowingDatesFlagsMode(showDateFlagsMode)
             setMinimumDate(minDate)
             setMaximumDate(maxDate)
         }
@@ -99,11 +98,11 @@ abstract class KalendarPagerAdapter<V : KalendarPagerView> : PagerAdapter() {
         } ?: return count / 2
     }
 
-    fun setShowingDatesMode(mode: MaterialKalendar.ShowingDateModes) {
-        showDateFlagsMode = mode
+    fun setShowingDatesMode(@MaterialKalendar.ShowingDateModes flagsMode: Int) {
+        showDateFlagsMode = flagsMode
 
         currentViews.forEach {
-            it.setShowingDatesMode(mode)
+            it.setShowingDatesFlagsMode(flagsMode)
         }
     }
 

@@ -23,6 +23,7 @@ class BasicCalendarTestActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         AndroidThreeTen.init(this)
         setContentView(R.layout.activity_basic_calendar)
+        calendarView.setCalendarBounds(KalendarDay.from(2018, 1, 30), KalendarDay.from(2018, 12, 20))
         calendarView.setOnDateChangedListener(object : MaterialKalendar.OnDateSelectedListener {
             override fun onDateSelected(widget: MaterialKalendar, day: KalendarDay) {
                 textView.text = day.date.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.getDefault()))

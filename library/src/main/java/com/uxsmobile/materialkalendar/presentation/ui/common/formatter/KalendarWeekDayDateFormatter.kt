@@ -13,6 +13,6 @@ import java.util.Locale
  */
 class KalendarWeekDayDateFormatter: DateFormatter<DayOfWeek> {
 
-    override fun format(weekDay: DayOfWeek): CharSequence = weekDay.getDisplayName(TextStyle.NARROW_STANDALONE, Locale.getDefault()).toUpperCase()
+    override fun format(weekDay: DayOfWeek): CharSequence = weekDay.getDisplayName(TextStyle.SHORT_STANDALONE, Locale.getDefault())
 
 }
