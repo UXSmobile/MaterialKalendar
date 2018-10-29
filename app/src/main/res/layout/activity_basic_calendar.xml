@@ -10,7 +10,7 @@
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:mk_showingModes="non_current_months"
+        app:mk_showingModes="standard"
         app:mk_allowClickDaysOutsideCurrentMonth="true"
         app:mk_firstDayOfWeek="monday"
         app:mk_showWeekDayLabels="true"

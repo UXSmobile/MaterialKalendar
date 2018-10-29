@@ -39,7 +39,7 @@ internal class KalendarMonthView(materialKalendarView: MaterialKalendar,
     override fun isDayEnabled(day: KalendarDay): Boolean = day.date.month == firstDayToShow.date.month
 
     fun setMonthlyAggregationData(data: KalendarMonthlyAggregation) {
-        dayViews.asSequence().filter { isDayEnabled(it.day)}.toList()
+        dayViews.asSequence()
                 .forEach { dayView ->
                     dayView.apply {
                         applyBarChartData(KalendarDayViewData(

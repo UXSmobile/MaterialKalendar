@@ -77,34 +77,36 @@ internal class KalendarDayView
 
     fun setupDayShowingMode(flagsMode: Int, inRange: Boolean, inMonth: Boolean) {
         var dayShouldBeEnabled = inMonth && inRange
+        var shouldApplyGrayScaleColorScheme = false
 
         if (flagsMode.shouldShowAllDates()) {
             dayShouldBeEnabled = true
         } else {
-            if (!inMonth && flagsMode.shouldShowNonCurrentMonths()) dayShouldBeEnabled = true
+            if (!inMonth && inRange && flagsMode.shouldShowNonCurrentMonths()) dayShouldBeEnabled = true
 
             if (!inRange && flagsMode.shouldShowOutOfCalendarRangeDates()) dayShouldBeEnabled = dayShouldBeEnabled or inMonth
 
             if (flagsMode.shouldShowDefaultDates()) dayShouldBeEnabled = dayShouldBeEnabled.or(inMonth && inRange)
 
-            if ((!inMonth || (inMonth && !inRange)) && dayShouldBeEnabled) {
+            shouldApplyGrayScaleColorScheme = (!inMonth || (inMonth && !inRange)) && dayShouldBeEnabled
+            if (shouldApplyGrayScaleColorScheme) {
                 dayNumber.setTextColor(Color.GRAY)
             }
         }
 
-        dayStatus = Pair(inMonth, inRange)
+        dayStatus = Pair(dayShouldBeEnabled, shouldApplyGrayScaleColorScheme)
 
         visibility = if (dayShouldBeEnabled) { View.VISIBLE } else { View.INVISIBLE }
     }
 
-    fun applyBarChartData(dataSet: KalendarDayViewData, applyGrayScaleColorScheme: Boolean = false) {
+    fun applyBarChartData(dataSet: KalendarDayViewData) {
         dayMovementsBarChart.apply {
             data = BarData().apply {
                 addDataSet(BarDataSet(
                         dataSet.barChartValues.mapIndexed { index, value -> BarEntry(index.toFloat(), value) },
                         "").apply {
                     barWidth = .9f
-                    colors = if (applyGrayScaleColorScheme) listOf(Color.GRAY, Color.GRAY, Color.GRAY )else colorPalette
+                    colors = if (dayStatus.second) listOf(Color.GRAY, Color.GRAY, Color.GRAY )else colorPalette
                     setDrawValues(false)
                 })
             }
