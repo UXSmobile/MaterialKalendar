@@ -57,22 +57,9 @@ internal class KalendarDayView
         setDayNumber(day)
     }
 
-    fun setDayNumber(day: KalendarDay) {
-        this.day = day
-
-        dayNumber.apply {
-            text = formatter.format(this@KalendarDayView.day)
-            setCheckedDay(day.isToday())
-        }
-    }
-
     fun setDayFormatter(formatter: DateFormatter<KalendarDay>) {
         this.formatter = formatter
         setDayNumber(this.day)
-    }
-
-    fun setCheckedDay(checked: Boolean) {
-        if (checked) dayNumber.typeface = Typeface.DEFAULT_BOLD else Typeface.DEFAULT
     }
 
     fun setupDayShowingMode(flagsMode: Int, inRange: Boolean, inMonth: Boolean) {
@@ -113,6 +100,19 @@ internal class KalendarDayView
             visibility = View.VISIBLE
             animateY(500, Easing.EasingOption.EaseOutBounce)
         }
+    }
+
+    private fun setDayNumber(day: KalendarDay) {
+        this.day = day
+
+        dayNumber.apply {
+            text = formatter.format(this@KalendarDayView.day)
+            setCheckedDay(day.isToday())
+        }
+    }
+
+    private fun setCheckedDay(checked: Boolean) {
+        if (checked) dayNumber.typeface = Typeface.DEFAULT_BOLD else Typeface.DEFAULT
     }
 
     private fun setupBarChart() {
