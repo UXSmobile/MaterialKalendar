@@ -11,7 +11,7 @@ import java.util.Locale
  *
  * Copyright © 2018 UXS Mobile. All rights reserved.
  */
-class KalendarWeekDayDateFormatter: DateFormatter<DayOfWeek> {
+internal class KalendarWeekDayDateFormatter: DateFormatter<DayOfWeek> {
 
     override fun format(weekDay: DayOfWeek): CharSequence = weekDay.getDisplayName(TextStyle.SHORT_STANDALONE, Locale.getDefault())
 

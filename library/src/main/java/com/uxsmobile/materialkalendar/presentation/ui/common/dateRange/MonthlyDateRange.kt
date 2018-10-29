@@ -10,7 +10,7 @@ import org.threeten.bp.Period
  *
  * Copyright © 2018 UXS Mobile. All rights reserved.
  */
-class MonthlyDateRange(minDateRange: KalendarDay,
+internal class MonthlyDateRange(minDateRange: KalendarDay,
                        private val maxDateRange: KalendarDay) : DateRangeIndex {
 
     private var minDateInFirstMonthToShow: KalendarDay = KalendarDay.from(minDateRange.date.year,

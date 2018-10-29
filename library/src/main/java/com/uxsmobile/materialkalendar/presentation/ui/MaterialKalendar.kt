@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.uxsmobile.library.R
 import com.uxsmobile.materialkalendar.app.dpToPx
 import com.uxsmobile.materialkalendar.data.KalendarDay
+import com.uxsmobile.materialkalendar.data.KalendarMonthlyAggregation
 import com.uxsmobile.materialkalendar.presentation.ui.common.formatter.ArrayKalendarWeekDayDateFormatter
 import com.uxsmobile.materialkalendar.presentation.ui.common.formatter.DateFormatter
 import com.uxsmobile.materialkalendar.presentation.ui.common.formatter.KalendarWeekDayDateFormatter
@@ -52,14 +53,18 @@ class MaterialKalendar
 
     private val pageChangeListener = object : ViewPager.OnPageChangeListener {
         override fun onPageScrollStateChanged(state: Int) {
+            pagerScrollState = state
+            pagerScrollState.let {
+                if (it == ViewPager.SCROLL_STATE_IDLE) {
+                    dispatchOnMonthChanged(adapter.getItem(pager.currentItem))
+                }
+            }
         }
 
         override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
         }
 
         override fun onPageSelected(position: Int) {
-            currentDay = adapter.getItem(position)
-            dispatchOnMonthChanged(currentDay)
         }
     }
 
@@ -70,6 +75,8 @@ class MaterialKalendar
 
     private var dateSelectedListener: OnDateSelectedListener? = null
     private var monthChangedListener: OnMonthChangedListener? = null
+
+    private var pagerScrollState: Int? = null
 
     private var currentDay: KalendarDay
     private var minDate: KalendarDay? = null
@@ -306,7 +313,7 @@ class MaterialKalendar
         allowDynamicWeeksHeightResize = enable
     }
 
-    fun getCurrentDate(): KalendarDay {
+    fun getVisibleDate(): KalendarDay {
         return adapter.getItem(pager.currentItem)
     }
 
@@ -318,8 +325,16 @@ class MaterialKalendar
         dateSelectedListener = listener
     }
 
+    fun setOnMonthChangedListener(listener: OnMonthChangedListener) {
+        monthChangedListener = listener
+    }
+
+    fun setMonthlyAggregationData(data: KalendarMonthlyAggregation) {
+        (adapter as? KalendarMonthPagerAdapter)?.setMonthlyAggregationData(pager.findViewWithTag(data.provideMonthAggregationDate().date.withDayOfMonth(1).toString()), data)
+    }
+
     internal fun onDateClicked(dayView: KalendarDayView) {
-        val currentDate = getCurrentDate()
+        val currentDate = getVisibleDate()
         val selectedDate = dayView.day
         val currentMonth = currentDate.date.monthValue
         val selectedMonth = selectedDate.date.monthValue

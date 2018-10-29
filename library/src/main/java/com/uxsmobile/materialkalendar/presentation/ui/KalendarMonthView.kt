@@ -2,6 +2,8 @@ package com.uxsmobile.materialkalendar.presentation.ui
 
 import android.annotation.SuppressLint
 import com.uxsmobile.materialkalendar.data.KalendarDay
+import com.uxsmobile.materialkalendar.data.KalendarDayViewData
+import com.uxsmobile.materialkalendar.data.KalendarMonthlyAggregation
 import com.uxsmobile.materialkalendar.presentation.ui.pager.KalendarPagerView
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
@@ -14,7 +16,7 @@ import org.threeten.bp.LocalDate
  * Copyright © 2018 UXS Mobile. All rights reserved.
  */
 @SuppressLint("ViewConstructor")
-class KalendarMonthView(materialKalendarView: MaterialKalendar,
+internal class KalendarMonthView(materialKalendarView: MaterialKalendar,
                         val firstDayToShow: KalendarDay,
                         firstWeekDay: DayOfWeek,
                         private val shouldShowWeekDays: Boolean) : KalendarPagerView(materialKalendarView,
@@ -35,5 +37,17 @@ class KalendarMonthView(materialKalendarView: MaterialKalendar,
     }
 
     override fun isDayEnabled(day: KalendarDay): Boolean = day.date.month == firstDayToShow.date.month
+
+    fun setMonthlyAggregationData(data: KalendarMonthlyAggregation) {
+        dayViews.asSequence().filter { isDayEnabled(it.day)}.toList()
+                .forEach { dayView ->
+                    dayView.apply {
+                        applyBarChartData(KalendarDayViewData(
+                                listOf(data.provideAggregationIncomesData().mapValues { it.value.toFloat() }[dayView.day] ?: 0f,
+                                       data.provideAggregationExpensesData().mapValues { it.value.toFloat() }[dayView.day]?: 0f,
+                                       data.provideAggregationPredictionsData().mapValues { it.value.toFloat() }[dayView.day] ?: 0f)))
+                    }
+                }
+    }
 
 }

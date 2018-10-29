@@ -52,5 +52,5 @@ private String generateVersionName() {
     if (rootProject.ext.versionClassifier != null) {
         versionName += "-" + rootProject.ext.versionClassifier
     }
-    return versionName;
+    return versionName
 }

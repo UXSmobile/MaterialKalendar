@@ -9,7 +9,7 @@ import org.threeten.bp.DayOfWeek
  *
  * Copyright © 2018 UXS Mobile. All rights reserved.
  */
-class ArrayKalendarWeekDayDateFormatter(private val weekDayLabels: Array<CharSequence>?) : DateFormatter<DayOfWeek> {
+internal class ArrayKalendarWeekDayDateFormatter(private val weekDayLabels: Array<CharSequence>?) : DateFormatter<DayOfWeek> {
 
     init {
         weekDayLabels?.let {

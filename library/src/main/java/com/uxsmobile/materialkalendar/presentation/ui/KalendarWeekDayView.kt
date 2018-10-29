@@ -19,12 +19,13 @@ import org.threeten.bp.DayOfWeek
  */
 @SuppressLint("ViewConstructor")
 class KalendarWeekDayView(context: Context,
-                          private var weekDay: DayOfWeek,
+                          private val weekDay: DayOfWeek,
                           private var formatter: DateFormatter<DayOfWeek> = KalendarWeekDayDateFormatter()) : AppCompatTextView(context) {
 
     init {
         gravity = Gravity.CENTER
         textAlignment = View.TEXT_ALIGNMENT_CENTER
+        setTextColor(Color.WHITE)
     }
 
     fun setWeekDayFormatter(formatter: DateFormatter<DayOfWeek>?) {
@@ -32,10 +33,8 @@ class KalendarWeekDayView(context: Context,
         setDayOfWeek(weekDay)
     }
 
-    fun setDayOfWeek(weekDay: DayOfWeek) {
-        this.weekDay = weekDay
+    private fun setDayOfWeek(weekDay: DayOfWeek) {
         text = formatter.format(weekDay)
-        setTextColor(Color.WHITE)
     }
 
 }

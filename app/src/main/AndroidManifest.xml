@@ -20,28 +20,9 @@
         </activity>
 
         <activity
-            android:name=".DayViewTestActivity"
-            android:label="DayViewTestActivity"
-            android:parentActivityName=".MainActivity"
-            >
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"
-                />
-
-            <intent-filter>
-                <action android:name="android.intent.action.RUN"/>
-                <category android:name="com.uxsmobile.materialkalendar.app.SAMPLE"/>
-            </intent-filter>
-
-        </activity>
-
-        <activity
             android:name=".BasicCalendarTestActivity"
             android:label="BasicCalendarTestActivity"
-            android:parentActivityName=".MainActivity"
-            >
+            android:parentActivityName=".MainActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

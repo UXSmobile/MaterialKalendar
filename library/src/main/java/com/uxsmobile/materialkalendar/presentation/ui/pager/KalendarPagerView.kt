@@ -21,10 +21,10 @@ import org.threeten.bp.temporal.WeekFields
  *
  * Copyright © 2018 UXS Mobile. All rights reserved.
  */
-abstract class KalendarPagerView(private val materialKalendar: MaterialKalendar,
-                                 private val firstDayToShow: KalendarDay,
-                                 private val firstWeekDay: DayOfWeek,
-                                 private val shouldShowWeekDays: Boolean): ViewGroup(materialKalendar.context) {
+internal abstract class KalendarPagerView(private val materialKalendar: MaterialKalendar,
+                                          private val firstDayToShow: KalendarDay,
+                                          private val firstWeekDay: DayOfWeek,
+                                          private val shouldShowWeekDays: Boolean) : ViewGroup(materialKalendar.context) {
 
     companion object {
         const val DEFAULT_DAYS_IN_WEEK = 7
@@ -32,13 +32,14 @@ abstract class KalendarPagerView(private val materialKalendar: MaterialKalendar,
         const val DAY_NAMES_ROW = 1
     }
 
-    private val dayViews = mutableListOf<KalendarDayView>()
+    protected val dayViews = mutableListOf<KalendarDayView>()
     private val weekDayViews = mutableListOf<KalendarWeekDayView>()
 
     private var minDate: KalendarDay? = null
     private var maxDate: KalendarDay? = null
 
-    @MaterialKalendar.ShowingDateModes private var showDateFlagsMode = MaterialKalendar.SHOWING_MODE_DEFAULT
+    @MaterialKalendar.ShowingDateModes
+    private var showDateFlagsMode = MaterialKalendar.SHOWING_MODE_DEFAULT
 
     init {
         clipChildren = false
@@ -60,7 +61,7 @@ abstract class KalendarPagerView(private val materialKalendar: MaterialKalendar,
             return
         }
 
-        val measureTileWidth = (specWidthSize - (DEFAULT_DAYS_IN_WEEK -1) * 8.dpToPx()) / (DEFAULT_DAYS_IN_WEEK)
+        val measureTileWidth = (specWidthSize - (DEFAULT_DAYS_IN_WEEK - 1) * 8.dpToPx()) / (DEFAULT_DAYS_IN_WEEK)
         val measureTileHeight = (specHeightSize - (getRows() + if (shouldShowWeekDays) -1 else 1) * 8.dpToPx()) / (getRows())
 
         setMeasuredDimension(specWidthSize, specHeightSize)
@@ -100,6 +101,8 @@ abstract class KalendarPagerView(private val materialKalendar: MaterialKalendar,
         return false
     }
 
+    fun getFirstVisibleDate() = firstDayToShow
+
     fun setMinimumDate(minDate: KalendarDay) {
         this.minDate = minDate
         refreshUi()
@@ -119,19 +122,6 @@ abstract class KalendarPagerView(private val materialKalendar: MaterialKalendar,
         weekDayViews.forEach {
             it.setWeekDayFormatter(formatter)
         }
-    }
-
-    private fun refreshUi() {
-        safeLet(minDate, maxDate) { first, second ->
-            updateDateRange(first, second)
-        }
-    }
-
-    private fun updateDateRange(minDate: KalendarDay, maxDate: KalendarDay = KalendarDay.today()) {
-        dayViews.forEach {
-            it.setupDayShowingMode(showDateFlagsMode, it.day.isInDateRange(minDate, maxDate), isDayEnabled(it.day))
-        }
-        postInvalidate()
     }
 
     protected abstract fun getRows(): Int
@@ -173,6 +163,19 @@ abstract class KalendarPagerView(private val materialKalendar: MaterialKalendar,
             delta -= DEFAULT_DAYS_IN_WEEK
         }
         return temp.plusDays(delta.toLong())
+    }
+
+    private fun refreshUi() {
+        safeLet(minDate, maxDate) { first, second ->
+            updateDateRange(first, second)
+        }
+    }
+
+    private fun updateDateRange(minDate: KalendarDay, maxDate: KalendarDay = KalendarDay.today()) {
+        dayViews.forEach {
+            it.setupDayShowingMode(showDateFlagsMode, it.day.isInDateRange(minDate, maxDate), isDayEnabled(it.day))
+        }
+        postInvalidate()
     }
 
 }

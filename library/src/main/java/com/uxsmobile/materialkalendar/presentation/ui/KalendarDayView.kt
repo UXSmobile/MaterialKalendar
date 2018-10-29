@@ -12,7 +12,6 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.uxsmobile.library.R
-import com.uxsmobile.materialkalendar.app.random
 import com.uxsmobile.materialkalendar.app.shouldShowAllDates
 import com.uxsmobile.materialkalendar.app.shouldShowDefaultDates
 import com.uxsmobile.materialkalendar.app.shouldShowNonCurrentMonths
@@ -31,7 +30,7 @@ import kotlinx.android.synthetic.main.view_calendar_day.view.dayNumber
  *
  * Copyright © 2018 UXS Mobile. All rights reserved.
  */
-class KalendarDayView
+internal class KalendarDayView
 @JvmOverloads constructor(context: Context,
                           attrs: AttributeSet? = null,
                           defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
@@ -43,6 +42,7 @@ class KalendarDayView
     lateinit var day: KalendarDay
 
     private var formatter: DateFormatter<KalendarDay> = KalendarDayDateFormatter()
+    private var dayStatus: Pair<Boolean, Boolean> = Pair(true, true)
     private var colorPalette = emptyList<Int>()
 
     init {
@@ -92,13 +92,9 @@ class KalendarDayView
             }
         }
 
-        visibility = if (dayShouldBeEnabled) {
-            applyBarChartData(KalendarDayViewData((0..2).map { (0..1).random() }), !inMonth || (inMonth && !inRange))
-            performBarChartVerticalAnimation()
-            View.VISIBLE
-        } else {
-            View.INVISIBLE
-        }
+        dayStatus = Pair(inMonth, inRange)
+
+        visibility = if (dayShouldBeEnabled) { View.VISIBLE } else { View.INVISIBLE }
     }
 
     fun applyBarChartData(dataSet: KalendarDayViewData, applyGrayScaleColorScheme: Boolean = false) {
@@ -112,12 +108,8 @@ class KalendarDayView
                     setDrawValues(false)
                 })
             }
-        }
-    }
-
-    fun performBarChartVerticalAnimation() {
-        dayMovementsBarChart.apply {
-            animateY(700, Easing.EasingOption.EaseOutBounce)
+            visibility = View.VISIBLE
+            animateY(500, Easing.EasingOption.EaseOutBounce)
         }
     }
 

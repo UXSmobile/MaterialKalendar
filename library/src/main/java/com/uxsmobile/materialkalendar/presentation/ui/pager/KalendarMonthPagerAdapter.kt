@@ -1,6 +1,7 @@
 package com.uxsmobile.materialkalendar.presentation.ui.pager
 
 import com.uxsmobile.materialkalendar.data.KalendarDay
+import com.uxsmobile.materialkalendar.data.KalendarMonthlyAggregation
 import com.uxsmobile.materialkalendar.presentation.ui.KalendarMonthView
 import com.uxsmobile.materialkalendar.presentation.ui.MaterialKalendar
 import com.uxsmobile.materialkalendar.presentation.ui.common.dateRange.DateRangeIndex
@@ -13,7 +14,7 @@ import com.uxsmobile.materialkalendar.presentation.ui.common.dateRange.MonthlyDa
  *
  * Copyright © 2018 UXS Mobile. All rights reserved.
  */
-class KalendarMonthPagerAdapter(private val materialKalendar: MaterialKalendar): KalendarPagerAdapter<KalendarMonthView>() {
+internal class KalendarMonthPagerAdapter(private val materialKalendar: MaterialKalendar): KalendarPagerAdapter<KalendarMonthView>() {
 
     override fun createView(position: Int): KalendarMonthView = KalendarMonthView(materialKalendar,
                                                                                   getItem(position),
@@ -25,4 +26,9 @@ class KalendarMonthPagerAdapter(private val materialKalendar: MaterialKalendar):
     override fun isInstanceOfView(obj: Any): Boolean = obj is KalendarMonthView
 
     override fun createRangeIndex(min: KalendarDay, max: KalendarDay): DateRangeIndex = MonthlyDateRange(min, max)
+
+    fun setMonthlyAggregationData(monthView: KalendarMonthView?, data: KalendarMonthlyAggregation) {
+        monthView?.setMonthlyAggregationData(data)
+    }
+
 }

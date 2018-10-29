@@ -7,4 +7,4 @@ package com.uxsmobile.materialkalendar.data
  *
  * Copyright © 2018 UXS Mobile. All rights reserved.
  */
-class KalendarDayViewData(val barChartValues: List<Float>)
+internal class KalendarDayViewData(val barChartValues: List<Float>)

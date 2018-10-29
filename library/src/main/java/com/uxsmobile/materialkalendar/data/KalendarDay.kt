@@ -20,7 +20,7 @@ data class KalendarDay(val date: LocalDate) : Parcelable {
         fun today() = KalendarDay(LocalDate.now())
 
         @JvmStatic
-        fun from(year: Int, month: Int, day: Int) = KalendarDay(
+        fun from(year: Int, month: Int = 1, day: Int = 1) = KalendarDay(
                 LocalDate.of(year, month, day))
 
         @JvmStatic
@@ -37,7 +37,7 @@ data class KalendarDay(val date: LocalDate) : Parcelable {
     }
 
     fun isToday(): Boolean {
-        return !isAfter(today()) && !isBefore(today())
+        return this == today()
     }
 
 }

@@ -11,7 +11,7 @@ import java.util.Locale
  *
  * Copyright © 2018 UXS Mobile. All rights reserved.
  */
-class KalendarDayDateFormatter(
+internal class KalendarDayDateFormatter(
         private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d", Locale.getDefault())) : DateFormatter<KalendarDay> {
 
     override fun format(day: KalendarDay): CharSequence = formatter.format(day.date)

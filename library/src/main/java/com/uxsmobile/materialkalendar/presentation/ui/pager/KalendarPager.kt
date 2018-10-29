@@ -13,7 +13,7 @@ import android.view.MotionEvent
  *
  * Copyright © 2018 UXS Mobile. All rights reserved.
  */
-class KalendarPager: ViewPager {
+internal class KalendarPager: ViewPager {
 
     var pagingEnabled = true
 

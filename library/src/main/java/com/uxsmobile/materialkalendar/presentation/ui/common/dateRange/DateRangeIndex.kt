@@ -9,7 +9,7 @@ import com.uxsmobile.materialkalendar.data.KalendarDay
  *
  * Copyright © 2018 UXS Mobile. All rights reserved.
  */
-interface DateRangeIndex {
+internal interface DateRangeIndex {
 
     /**
      * Count of pages displayed between 2 dates.

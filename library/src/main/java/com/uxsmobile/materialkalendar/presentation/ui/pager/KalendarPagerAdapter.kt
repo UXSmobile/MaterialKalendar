@@ -18,7 +18,7 @@ import org.threeten.bp.DayOfWeek
  * Copyright © 2018 UXS Mobile. All rights reserved.
  */
 @Suppress("UNCHECKED_CAST")
-abstract class KalendarPagerAdapter<V : KalendarPagerView> : PagerAdapter() {
+internal abstract class KalendarPagerAdapter<V : KalendarPagerView> : PagerAdapter() {
 
     private val currentViews = arrayListOf<V>()
     private val today = KalendarDay.today()
@@ -31,8 +31,8 @@ abstract class KalendarPagerAdapter<V : KalendarPagerView> : PagerAdapter() {
     private var rangeIndex: DateRangeIndex? = null
 
     init {
-        setRangeDates(KalendarDay.from(today.date.year - 5, today.date.monthValue, today.date.dayOfMonth),
-                      KalendarDay.from(today.date.year + 5, today.date.monthValue, today.date.dayOfMonth))
+        setRangeDates(KalendarDay.from(today.date.year - 2, today.date.monthValue, today.date.dayOfMonth),
+                      KalendarDay.from(today.date.year + 2, today.date.monthValue, today.date.dayOfMonth))
     }
 
     override fun getCount(): Int = rangeIndex?.count ?: 0
@@ -50,6 +50,7 @@ abstract class KalendarPagerAdapter<V : KalendarPagerView> : PagerAdapter() {
             setShowingDatesFlagsMode(showDateFlagsMode)
             setMinimumDate(minDate)
             setMaximumDate(maxDate)
+            tag = getFirstVisibleDate().date.toString()
         }
 
         container.addView(pagerView)
@@ -111,7 +112,6 @@ abstract class KalendarPagerAdapter<V : KalendarPagerView> : PagerAdapter() {
 
         currentViews.forEach {
             it.setWeekDayFormatter(formatter)
-
         }
     }
 
