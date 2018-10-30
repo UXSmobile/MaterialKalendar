@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="bar_chart_incomes_type">#F4137B</color>
+    <color name="bar_chart_expenses_type">#50E3C2</color>
+    <color name="bar_chart_expected_type">#FFCC00</color>
+    <color name="background_day_number_view">#0CFFFFFF</color>
+
+</resources>
