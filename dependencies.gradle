@@ -4,7 +4,7 @@ ext {
     targetSdkVersion = 28
     versionMajor = 0
     versionMinor = 1
-    versionPatch = 0
+    versionPatch = 1
     versionClassifier = null
     isSnapshot = true
 
