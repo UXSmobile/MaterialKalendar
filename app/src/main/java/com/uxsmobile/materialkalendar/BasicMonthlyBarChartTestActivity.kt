@@ -108,9 +108,9 @@ class BasicMonthlyBarChartTestActivity : AppCompatActivity() {
 
             monthlyBarChart.apply {
                 xAxis.axisMinimum = 0f
-                xAxis.axisMaximum = barChartValues.first.keys.toList().size.toFloat() - 1
+                xAxis.axisMaximum = barChartValues.first.keys.toList().size.toFloat()
                 xAxis.valueFormatter = IAxisValueFormatter { value, axis ->
-                    if (Math.abs(value.toInt()) <= xAxis.axisMaximum) {
+                    if (Math.abs(value.toInt()) <= xAxis.axisMaximum - 1) {
                         dateMonthFormatter.format(barChartValues.first.keys.toList()[Math.abs(value.toInt())]).toString()
                     } else {
                         ""
