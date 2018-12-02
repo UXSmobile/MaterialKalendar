@@ -133,6 +133,11 @@ internal abstract class KalendarPagerView(private val materialKalendar: Material
     protected fun addDayView(dayViews: MutableList<KalendarDayView>, temp: LocalDate) {
         val day = KalendarDay.from(temp)
         val dayView = KalendarDayView(context, day)
+
+        if (day.isToday()) {
+            dayView.setCheckedDay(true)
+        }
+
         dayView.setOnClickListener {
             if (it is KalendarDayView) {
                 materialKalendar.onDateClicked(it)

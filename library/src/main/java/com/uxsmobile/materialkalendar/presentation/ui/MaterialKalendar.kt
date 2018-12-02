@@ -61,11 +61,9 @@ class MaterialKalendar
             }
         }
 
-        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-        }
+        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
-        override fun onPageSelected(position: Int) {
-        }
+        override fun onPageSelected(position: Int) {}
     }
 
     private val pager: KalendarPager
@@ -78,6 +76,7 @@ class MaterialKalendar
 
     private var pagerScrollState: Int? = null
 
+    private var selectedDay: KalendarDay
     private var currentDay: KalendarDay
     private var minDate: KalendarDay? = null
     private var maxDate: KalendarDay? = null
@@ -153,6 +152,7 @@ class MaterialKalendar
         setupChildren()
 
         currentDay = KalendarDay.today()
+        selectedDay = currentDay
         setCurrentDate(currentDay)
     }
 
@@ -313,7 +313,9 @@ class MaterialKalendar
         allowDynamicWeeksHeightResize = enable
     }
 
-    fun getVisibleDate(): KalendarDay {
+    fun getSelectedDayDate(): KalendarDay = selectedDay
+
+    fun getVisibleMonthDate(): KalendarDay {
         return adapter.getItem(pager.currentItem)
     }
 
@@ -334,10 +336,14 @@ class MaterialKalendar
     }
 
     internal fun onDateClicked(dayView: KalendarDayView) {
-        val currentDate = getVisibleDate()
+        val currentDate = getVisibleMonthDate()
         val selectedDate = dayView.day
         val currentMonth = currentDate.date.monthValue
         val selectedMonth = selectedDate.date.monthValue
+
+        clearSelectedDay(selectedDay)
+        selectedDay = dayView.day
+        dayView.setCheckedDay(true)
 
         if (allowClickDaysOutsideCurrentMonth && currentMonth != selectedMonth) {
             if (currentDate.isAfter(selectedDate)) {
@@ -347,6 +353,10 @@ class MaterialKalendar
             }
         }
         dispatchOnDateSelected(selectedDate)
+    }
+
+    private fun clearSelectedDay(selectedDay: KalendarDay) {
+        (adapter.getItemFromMonth(KalendarDay.from(year = selectedDay.date.year, month = selectedDay.date.monthValue)) as? KalendarMonthView)?.disableCheckedDay(selectedDay)
     }
 
     private fun getWeekCount(): Int {

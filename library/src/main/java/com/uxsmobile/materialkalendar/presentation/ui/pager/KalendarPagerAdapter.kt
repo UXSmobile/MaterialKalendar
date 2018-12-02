@@ -119,6 +119,10 @@ internal abstract class KalendarPagerAdapter<V : KalendarPagerView> : PagerAdapt
         return rangeIndex?.getItem(position) ?: today
     }
 
+    fun getItemFromMonth(monthDate: KalendarDay): V? {
+        return currentViews.firstOrNull { it.tag == monthDate.date.toString() }
+    }
+
     fun getRangeIndex() = rangeIndex
 
 }

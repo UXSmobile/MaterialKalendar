@@ -35,11 +35,12 @@ internal class KalendarDayView
                           attrs: AttributeSet? = null,
                           defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
 
-    private val colorResources = listOf(R.color.bar_chart_incomes_type,
-                                        R.color.bar_chart_expenses_type,
+    private val colorResources = listOf(R.color.bar_chart_expenses_type,
+                                        R.color.bar_chart_incomes_type,
                                         R.color.bar_chart_expected_type)
 
     lateinit var day: KalendarDay
+    private set
 
     private var formatter: DateFormatter<KalendarDay> = KalendarDayDateFormatter()
     private var dayStatus: Pair<Boolean, Boolean> = Pair(true, true)
@@ -93,7 +94,7 @@ internal class KalendarDayView
                         dataSet.barChartValues.mapIndexed { index, value -> BarEntry(index.toFloat(), value) },
                         "").apply {
                     barWidth = .9f
-                    colors = if (dayStatus.second) listOf(Color.GRAY, Color.GRAY, Color.GRAY )else colorPalette
+                    colors = if (dayStatus.second) listOf(Color.GRAY, Color.GRAY, Color.GRAY ) else colorPalette
                     setDrawValues(false)
                 })
             }
@@ -107,12 +108,11 @@ internal class KalendarDayView
 
         dayNumber.apply {
             text = formatter.format(this@KalendarDayView.day)
-            setCheckedDay(day.isToday())
         }
     }
 
-    private fun setCheckedDay(checked: Boolean) {
-        if (checked) dayNumber.typeface = Typeface.DEFAULT_BOLD else Typeface.DEFAULT
+    fun setCheckedDay(checked: Boolean) {
+        dayNumber.apply { typeface = if (checked) Typeface.DEFAULT_BOLD else Typeface.DEFAULT }
     }
 
     private fun setupBarChart() {

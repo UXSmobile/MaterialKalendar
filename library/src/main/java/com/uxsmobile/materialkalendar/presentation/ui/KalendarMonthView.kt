@@ -28,7 +28,7 @@ internal class KalendarMonthView(materialKalendarView: MaterialKalendar,
 
     override fun buildDayViews(dayViews: MutableList<KalendarDayView>, calendar: LocalDate) {
         var tempDate = calendar
-        (0 until DEFAULT_MAX_WEEKS).map { _ ->
+        (0 until DEFAULT_MAX_WEEKS).map {
             (0 until DEFAULT_DAYS_IN_WEEK).map {
                 addDayView(dayViews, tempDate)
                 tempDate = tempDate.plusDays(1)
@@ -43,11 +43,15 @@ internal class KalendarMonthView(materialKalendarView: MaterialKalendar,
                 .forEach { dayView ->
                     dayView.apply {
                         applyBarChartData(KalendarDayViewData(
-                                listOf(data.provideAggregationIncomesData().mapValues { it.value.toFloat() }[dayView.day] ?: 0f,
-                                       data.provideAggregationExpensesData().mapValues { it.value.toFloat() }[dayView.day]?: 0f,
+                                listOf(data.provideAggregationExpensesData().mapValues { it.value.toFloat() }[dayView.day] ?: 0f,
+                                       data.provideAggregationIncomesData().mapValues { it.value.toFloat() }[dayView.day]?: 0f,
                                        data.provideAggregationPredictionsData().mapValues { it.value.toFloat() }[dayView.day] ?: 0f)))
                     }
                 }
+    }
+
+    fun disableCheckedDay(checkedDay: KalendarDay) {
+        dayViews.filter { it.day == checkedDay }.forEach { it.apply { setCheckedDay(false) } }
     }
 
 }

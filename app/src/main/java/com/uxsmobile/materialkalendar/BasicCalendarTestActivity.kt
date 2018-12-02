@@ -52,7 +52,7 @@ class BasicCalendarTestActivity: AppCompatActivity() {
         calendarView.setCalendarBounds(KalendarDay.from(2018, 1, 4), KalendarDay.from(2018, 12, 20))
         calendarView.setOnDateChangedListener(object : MaterialKalendar.OnDateSelectedListener {
             override fun onDateSelected(widget: MaterialKalendar, date: KalendarDay) {
-                textView.text = date.date.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.getDefault()))
+                textView.text = widget.getSelectedDayDate().date.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.getDefault()))
             }
         })
         calendarView.setOnMonthChangedListener(object : MaterialKalendar.OnMonthChangedListener {
@@ -61,6 +61,8 @@ class BasicCalendarTestActivity: AppCompatActivity() {
                 widget.setMonthlyAggregationData(aggregationData)
             }
         })
+
+        textView.text = calendarView.getSelectedDayDate().date.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.getDefault()))
     }
 
     private fun buildMonthlyAggregationData(day: KalendarDay) {
