@@ -143,6 +143,7 @@ class MaterialKalendar
         }
         pager = KalendarPager(context).apply {
             addOnPageChangeListener(pageChangeListener)
+            pageMargin = 16.dpToPx()
             setPadding(16.dpToPx(), 0, 16.dpToPx(), 0)
         }
         pager.adapter = adapter
