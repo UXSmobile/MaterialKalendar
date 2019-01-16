@@ -40,7 +40,7 @@ internal class KalendarDayView
                                         R.color.bar_chart_expected_type)
 
     lateinit var day: KalendarDay
-    private set
+        private set
 
     private var formatter: DateFormatter<KalendarDay> = KalendarDayDateFormatter()
     private var dayStatus: Pair<Boolean, Boolean> = Pair(true, true)
@@ -84,7 +84,11 @@ internal class KalendarDayView
 
         dayStatus = Pair(dayShouldBeEnabled, shouldApplyGrayScaleColorScheme)
 
-        visibility = if (dayShouldBeEnabled) { View.VISIBLE } else { View.INVISIBLE }
+        visibility = if (dayShouldBeEnabled) {
+            View.VISIBLE
+        } else {
+            View.INVISIBLE
+        }
     }
 
     fun applyBarChartData(dataSet: KalendarDayViewData) {
@@ -94,7 +98,7 @@ internal class KalendarDayView
                         dataSet.barChartValues.mapIndexed { index, value -> BarEntry(index.toFloat(), value) },
                         "").apply {
                     barWidth = .9f
-                    colors = if (dayStatus.second) listOf(Color.GRAY, Color.GRAY, Color.GRAY ) else colorPalette
+                    colors = if (dayStatus.second) listOf(Color.GRAY, Color.GRAY, Color.GRAY) else colorPalette
                     setDrawValues(false)
                 })
             }
@@ -108,11 +112,18 @@ internal class KalendarDayView
 
         dayNumber.apply {
             text = formatter.format(this@KalendarDayView.day)
+            typeface = Typeface.createFromAsset(context.applicationContext.assets, "fonts/CalibreApp-Thin.ttf")
         }
     }
 
     fun setCheckedDay(checked: Boolean) {
-        dayNumber.apply { typeface = if (checked) Typeface.DEFAULT_BOLD else Typeface.DEFAULT }
+        dayNumber.apply {
+            typeface = if (checked) {
+                Typeface.createFromAsset(context.applicationContext.assets, "fonts/CalibreApp-Semibold.ttf")
+            } else {
+                Typeface.createFromAsset(context.applicationContext.assets, "fonts/CalibreApp-Thin.ttf")
+            }
+        }
     }
 
     private fun setupBarChart() {
