@@ -220,7 +220,7 @@ class MaterialKalendar
                     View.MeasureSpec.EXACTLY)
 
             val childHeightMeasureSpec = View.MeasureSpec.makeMeasureSpec(
-                    weeksToShow * (measureTileHeight + 8.dpToPx()),
+                    child.layoutParams.height * (measureTileHeight + 8.dpToPx()),
                     View.MeasureSpec.EXACTLY)
 
             child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
