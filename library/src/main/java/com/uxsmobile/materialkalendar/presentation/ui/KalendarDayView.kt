@@ -42,14 +42,22 @@ internal class KalendarDayView
     lateinit var day: KalendarDay
         private set
 
+    private val checkedDayTypeface: Typeface
+    private val notCheckedDayTypeface: Typeface
+
     private var formatter: DateFormatter<KalendarDay> = KalendarDayDateFormatter()
-    private var dayStatus: Pair<Boolean, Boolean> = Pair(true, true)
+    var dayStatus: Triple<Boolean, Boolean, Boolean> = Triple(true, true, false)
+        private set
     private var colorPalette = emptyList<Int>()
+
 
     init {
         View.inflate(context, R.layout.view_calendar_day, this)
 
         colorPalette = colorResources.map { ContextCompat.getColor(context, it) }
+        checkedDayTypeface = Typeface.createFromAsset(context.applicationContext.assets,
+                                                      "fonts/CalibreApp-Semibold.ttf")
+        notCheckedDayTypeface = Typeface.createFromAsset(context.applicationContext.assets, "fonts/CalibreApp-Thin.ttf")
 
         setupBarChart()
     }
@@ -82,7 +90,7 @@ internal class KalendarDayView
             }
         }
 
-        dayStatus = Pair(dayShouldBeEnabled, shouldApplyGrayScaleColorScheme)
+        dayStatus = Triple(dayShouldBeEnabled, shouldApplyGrayScaleColorScheme, dayStatus.third)
 
         visibility = if (dayShouldBeEnabled) {
             View.VISIBLE
@@ -112,18 +120,19 @@ internal class KalendarDayView
 
         dayNumber.apply {
             text = formatter.format(this@KalendarDayView.day)
-            typeface = Typeface.createFromAsset(context.applicationContext.assets, "fonts/CalibreApp-Thin.ttf")
+            typeface = if (dayStatus.third) checkedDayTypeface else notCheckedDayTypeface
         }
     }
 
     fun setCheckedDay(checked: Boolean) {
         dayNumber.apply {
             typeface = if (checked) {
-                Typeface.createFromAsset(context.applicationContext.assets, "fonts/CalibreApp-Semibold.ttf")
+                checkedDayTypeface
             } else {
-                Typeface.createFromAsset(context.applicationContext.assets, "fonts/CalibreApp-Thin.ttf")
+                notCheckedDayTypeface
             }
         }
+        dayStatus = Triple(dayStatus.first, dayStatus.second, checked)
     }
 
     private fun setupBarChart() {

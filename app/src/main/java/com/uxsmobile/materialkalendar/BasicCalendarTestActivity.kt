@@ -51,7 +51,7 @@ class BasicCalendarTestActivity: AppCompatActivity() {
 
         calendarView.setCalendarBounds(KalendarDay.from(2018, 1, 4), KalendarDay.from(2019, 12, 20))
         calendarView.setOnDateChangedListener(object : MaterialKalendar.OnDateSelectedListener {
-            override fun onDateSelected(widget: MaterialKalendar, date: KalendarDay) {
+            override fun onDateSelected(widget: MaterialKalendar, date: KalendarDay, isDaySelected: Boolean) {
                 textView.text = widget.getSelectedDayDate().date.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.getDefault()))
             }
         })

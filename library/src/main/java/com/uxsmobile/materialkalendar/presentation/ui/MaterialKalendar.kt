@@ -76,7 +76,7 @@ class MaterialKalendar
 
     private var pagerScrollState: Int? = null
 
-    private var selectedDay: KalendarDay
+    var selectedDay: KalendarDay private set
     private var currentDay: KalendarDay
     private var minDate: KalendarDay? = null
     private var maxDate: KalendarDay? = null
@@ -340,9 +340,12 @@ class MaterialKalendar
         val currentMonth = currentDate.date.monthValue
         val selectedMonth = selectedDate.date.monthValue
 
+        val isDayChecked = dayView.dayStatus.third
         clearSelectedDay(selectedDay)
-        selectedDay = dayView.day
-        dayView.setCheckedDay(true)
+        dayView.let {
+            selectedDay = it.day
+            it.setCheckedDay(!isDayChecked)
+        }
 
         if (allowClickDaysOutsideCurrentMonth && currentMonth != selectedMonth) {
             if (currentDate.isAfter(selectedDate)) {
@@ -351,10 +354,10 @@ class MaterialKalendar
                 goToNextMonth()
             }
         }
-        dispatchOnDateSelected(selectedDate)
+        dispatchOnDateSelected(selectedDate, dayView.dayStatus.third)
     }
 
-    private fun clearSelectedDay(selectedDay: KalendarDay) {
+    fun clearSelectedDay(selectedDay: KalendarDay) {
         (adapter.getItemFromMonth(KalendarDay.from(year = selectedDay.date.year, month = selectedDay.date.monthValue)) as? KalendarMonthView)?.disableCheckedDay(selectedDay)
     }
 
@@ -368,8 +371,8 @@ class MaterialKalendar
         return if (shouldShowWeekDays) weekCount + DEFAULT_WEEK_DAYS_ROW else weekCount
     }
 
-    private fun dispatchOnDateSelected(day: KalendarDay) {
-        dateSelectedListener?.onDateSelected(this, day)
+    private fun dispatchOnDateSelected(day: KalendarDay, isDaySelected: Boolean) {
+        dateSelectedListener?.onDateSelected(this, day, isDaySelected)
     }
 
     private fun dispatchOnMonthChanged(day: KalendarDay) {
@@ -423,7 +426,7 @@ class MaterialKalendar
 
     interface OnDateSelectedListener {
 
-        fun onDateSelected(widget: MaterialKalendar, date: KalendarDay)
+        fun onDateSelected(widget: MaterialKalendar, date: KalendarDay, isDaySelected: Boolean)
 
     }
 
