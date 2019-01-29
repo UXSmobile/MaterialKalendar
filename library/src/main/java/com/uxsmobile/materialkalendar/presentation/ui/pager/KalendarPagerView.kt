@@ -134,7 +134,7 @@ internal abstract class KalendarPagerView(private val materialKalendar: Material
         val day = KalendarDay.from(temp)
         val dayView = KalendarDayView(context, day)
 
-        if (day.isToday()) {
+        if (day == materialKalendar.selectedDay) {
             dayView.setCheckedDay(true)
         }
 

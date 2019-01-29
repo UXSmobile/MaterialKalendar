@@ -7,8 +7,10 @@ import com.uxsmobile.materialkalendar.app.random
 import com.uxsmobile.materialkalendar.data.KalendarDay
 import com.uxsmobile.materialkalendar.data.KalendarMonthlyAggregation
 import com.uxsmobile.materialkalendar.presentation.ui.MaterialKalendar
+import com.uxsmobile.materialkalendar.presentation.ui.common.formatter.KalendarDayMonthYearDateFormatter
 import kotlinx.android.synthetic.main.activity_basic_calendar.calendarView
-import kotlinx.android.synthetic.main.activity_basic_calendar.textView
+import kotlinx.android.synthetic.main.activity_basic_calendar.dateTextView
+import kotlinx.android.synthetic.main.activity_basic_calendar.monthYearTextView
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.Locale
 
@@ -44,6 +46,8 @@ class BasicCalendarTestActivity: AppCompatActivity() {
         }
     }
 
+    private val monthYearFormatter = KalendarDayMonthYearDateFormatter()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AndroidThreeTen.init(this)
@@ -52,17 +56,19 @@ class BasicCalendarTestActivity: AppCompatActivity() {
         calendarView.setCalendarBounds(KalendarDay.from(2018, 1, 4), KalendarDay.from(2019, 12, 20))
         calendarView.setOnDateChangedListener(object : MaterialKalendar.OnDateSelectedListener {
             override fun onDateSelected(widget: MaterialKalendar, date: KalendarDay, isDaySelected: Boolean) {
-                textView.text = widget.getSelectedDayDate().date.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.getDefault()))
+                dateTextView.text = widget.getSelectedDayDate().date.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.getDefault()))
             }
         })
         calendarView.setOnMonthChangedListener(object : MaterialKalendar.OnMonthChangedListener {
             override fun onMonthChanged(widget: MaterialKalendar, date: KalendarDay) {
                 buildMonthlyAggregationData(date)
                 widget.setMonthlyAggregationData(aggregationData)
+                monthYearTextView.text = monthYearFormatter.format(date)
             }
         })
 
-        textView.text = calendarView.getSelectedDayDate().date.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.getDefault()))
+        dateTextView.text = calendarView.getSelectedDayDate().date.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.getDefault()))
+        monthYearTextView.text = monthYearFormatter.format(calendarView.getSelectedDayDate())
     }
 
     private fun buildMonthlyAggregationData(day: KalendarDay) {

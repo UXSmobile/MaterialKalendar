@@ -6,6 +6,17 @@
               android:background="@drawable/bg_riders_blur"
               android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/monthYearTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        />
+
     <com.uxsmobile.materialkalendar.presentation.ui.MaterialKalendar
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
@@ -18,12 +29,12 @@
         />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/dateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="16dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/white"
         />
 
