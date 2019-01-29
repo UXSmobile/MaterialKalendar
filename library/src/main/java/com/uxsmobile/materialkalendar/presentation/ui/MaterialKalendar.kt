@@ -76,7 +76,7 @@ class MaterialKalendar
 
     private var pagerScrollState: Int? = null
 
-    var selectedDay: KalendarDay private set
+    var selectedDay: KalendarDay? private set
     private var currentDay: KalendarDay
     private var minDate: KalendarDay? = null
     private var maxDate: KalendarDay? = null
@@ -138,6 +138,9 @@ class MaterialKalendar
             a.recycle()
         }
 
+        currentDay = KalendarDay.today()
+        selectedDay = currentDay
+
         adapter = KalendarMonthPagerAdapter(this@MaterialKalendar).apply {
             setShowingDatesMode(showingDateFlagModes)
         }
@@ -149,10 +152,8 @@ class MaterialKalendar
         pager.adapter = adapter
 
         setupChildren()
-
-        currentDay = KalendarDay.today()
-        selectedDay = currentDay
-        setCurrentDate(currentDay)
+        
+        selectedDay?.let { scrollToDate(it) }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -260,16 +261,17 @@ class MaterialKalendar
         this.minDate = minDate
         this.maxDate = maxDate
         adapter.setRangeDates(minDate, maxDate)
-        setCurrentDate(if (minDate.isAfter(currentDay)) minDate else currentDay)
+        scrollToDate(if (minDate.isAfter(currentDay)) minDate else currentDay)
     }
 
-    fun setCurrentDate(date: KalendarDay) {
+    fun scrollToDate(date: KalendarDay) {
         pager.setCurrentItem(adapter.getIndexForDay(date), true)
     }
 
     fun setTileSize(size: Int) {
         this.tileWidth = size
         this.tileHeight = size
+
         requestLayout()
     }
 
@@ -312,8 +314,6 @@ class MaterialKalendar
         allowDynamicWeeksHeightResize = enable
     }
 
-    fun getSelectedDayDate(): KalendarDay = selectedDay
-
     fun getVisibleMonthDate(): KalendarDay {
         return adapter.getItem(pager.currentItem)
     }
@@ -341,7 +341,7 @@ class MaterialKalendar
         val selectedMonth = selectedDate.date.monthValue
 
         val isDayChecked = dayView.dayStatus.third
-        clearSelectedDay(selectedDay)
+        clearSelectedDay()
         dayView.let {
             selectedDay = it.day
             it.setCheckedDay(!isDayChecked)
@@ -357,8 +357,9 @@ class MaterialKalendar
         dispatchOnDateSelected(selectedDate, dayView.dayStatus.third)
     }
 
-    fun clearSelectedDay(selectedDay: KalendarDay) {
-        (adapter.getItemFromMonth(KalendarDay.from(year = selectedDay.date.year, month = selectedDay.date.monthValue)) as? KalendarMonthView)?.disableCheckedDay(selectedDay)
+    fun clearSelectedDay() {
+        selectedDay?.let { (adapter.getItemFromMonth(KalendarDay.from(year = it.date.year, month = it.date.monthValue)) as? KalendarMonthView)?.disableCheckedDay(it) }
+        selectedDay = null
     }
 
     private fun getWeekCount(): Int {
