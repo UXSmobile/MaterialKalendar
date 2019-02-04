@@ -330,6 +330,14 @@ class MaterialKalendar
         monthChangedListener = listener
     }
 
+    fun removeOnDateChangedListener() {
+        dateSelectedListener = null
+    }
+
+    fun removeOnMonthChangedListener() {
+        monthChangedListener = null
+    }
+
     fun setMonthlyAggregationData(data: KalendarMonthlyAggregation) {
         (adapter as? KalendarMonthPagerAdapter)?.setMonthlyAggregationData(pager.findViewWithTag(data.provideMonthAggregationDate().date.withDayOfMonth(1).toString()), data)
     }
