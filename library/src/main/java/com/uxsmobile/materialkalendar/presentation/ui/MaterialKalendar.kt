@@ -56,7 +56,7 @@ class MaterialKalendar
             pagerScrollState = state
             pagerScrollState.let {
                 if (it == ViewPager.SCROLL_STATE_IDLE) {
-                    dispatchOnMonthChanged(adapter.getItem(pager.currentItem))
+                    if (triggerOnMonthChanged) dispatchOnMonthChanged(adapter.getItem(pager.currentItem)) else triggerOnMonthChanged = true
                 }
             }
         }
@@ -87,6 +87,7 @@ class MaterialKalendar
     private var allowDynamicWeeksHeightResize: Boolean = false
     private var weekLabelsArray: Array<CharSequence>? = null
     private var shouldShowWeekDays: Boolean = true
+    private var triggerOnMonthChanged: Boolean = true
 
     init {
         clipToPadding = false
@@ -266,7 +267,8 @@ class MaterialKalendar
         scrollToDate(if (minDate.isAfter(currentDay)) minDate else currentDay)
     }
 
-    fun scrollToDate(date: KalendarDay) {
+    fun scrollToDate(date: KalendarDay, disableNextOnMonthChangedTrigger: Boolean = false) {
+        triggerOnMonthChanged = !disableNextOnMonthChangedTrigger
         pager.setCurrentItem(adapter.getIndexForDay(date), true)
     }
 
@@ -338,6 +340,14 @@ class MaterialKalendar
 
     fun removeOnMonthChangedListener() {
         monthChangedListener = null
+    }
+
+    fun addOnCalendarPageScrollChangeListener(listener: ViewPager.OnPageChangeListener) {
+        pager.addOnPageChangeListener(listener)
+    }
+
+    fun removeOnCalendarPageScrollChangeListener(listener: ViewPager.OnPageChangeListener) {
+        pager.removeOnPageChangeListener(listener)
     }
 
     fun setMonthlyAggregationData(data: KalendarMonthlyAggregation) {

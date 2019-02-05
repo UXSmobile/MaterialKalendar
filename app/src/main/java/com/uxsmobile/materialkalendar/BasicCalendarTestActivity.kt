@@ -10,7 +10,9 @@ import com.uxsmobile.materialkalendar.presentation.ui.MaterialKalendar
 import com.uxsmobile.materialkalendar.presentation.ui.common.formatter.KalendarDayMonthYearDateFormatter
 import kotlinx.android.synthetic.main.activity_basic_calendar.calendarView
 import kotlinx.android.synthetic.main.activity_basic_calendar.dateTextView
+import kotlinx.android.synthetic.main.activity_basic_calendar.disableNextOnMonthChangedTrigger
 import kotlinx.android.synthetic.main.activity_basic_calendar.monthYearTextView
+import kotlinx.android.synthetic.main.activity_basic_calendar.scrollCurrentDay
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.Locale
 
@@ -69,6 +71,7 @@ class BasicCalendarTestActivity: AppCompatActivity() {
 
         dateTextView.text = calendarView.selectedDay?.date?.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.getDefault()))
         calendarView.selectedDay?.let { monthYearTextView.text = monthYearFormatter.format(it) }
+        scrollCurrentDay.setOnClickListener { calendarView.scrollToDate(KalendarDay.today(), disableNextOnMonthChangedTrigger.isChecked) }
     }
 
     private fun buildMonthlyAggregationData(day: KalendarDay) {
