@@ -361,10 +361,12 @@ class MaterialKalendar
         val selectedMonth = selectedDate.date.monthValue
 
         val isDayChecked = dayView.dayStatus.third
-        clearSelectedDay()
-        dayView.let {
-            selectedDay = it.day
-            it.setCheckedDay(!isDayChecked)
+        dayView.let { kalendarDayView ->
+            clearSelectedDay()
+            if (!isDayChecked) {
+                selectedDay = kalendarDayView.day
+            }
+            kalendarDayView.setCheckedDay(!isDayChecked)
         }
 
         if (allowClickDaysOutsideCurrentMonth && currentMonth != selectedMonth) {
@@ -378,8 +380,12 @@ class MaterialKalendar
     }
 
     fun clearSelectedDay() {
-        selectedDay?.let { (adapter.getItemFromMonth(KalendarDay.from(year = it.date.year, month = it.date.monthValue)) as? KalendarMonthView)?.disableCheckedDay(it) }
+        uncheckSelectedDay()
         selectedDay = null
+    }
+
+    private fun uncheckSelectedDay() {
+        selectedDay?.let { (adapter.getItemFromMonth(KalendarDay.from(year = it.date.year, month = it.date.monthValue)) as? KalendarMonthView)?.disableCheckedDay(it) }
     }
 
     private fun getWeekCount(): Int {
