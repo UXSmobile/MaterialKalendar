@@ -85,6 +85,7 @@ class MaterialKalendar
     @ShowingDateModes private var showingDateFlagModes = SHOWING_MODE_DEFAULT
     private var allowClickDaysOutsideCurrentMonth: Boolean = true
     private var allowDynamicWeeksHeightResize: Boolean = false
+    private var weekLabelsArray: Array<CharSequence>? = null
     private var shouldShowWeekDays: Boolean = true
 
     init {
@@ -118,10 +119,7 @@ class MaterialKalendar
 
             shouldShowWeekDays = a.getBoolean(R.styleable.MaterialKalendar_mk_showWeekDayLabels, true)
 
-            val weekLabelsArray: Array<CharSequence>? = a.getTextArray(R.styleable.MaterialKalendar_mk_weekDayLabels)
-            weekLabelsArray?.let {
-                setWeekDayFormatter(ArrayKalendarWeekDayDateFormatter(weekLabelsArray))
-            }
+            weekLabelsArray = a.getTextArray(R.styleable.MaterialKalendar_mk_weekDayLabels)
 
             showingDateFlagModes = a.getInteger(R.styleable.MaterialKalendar_mk_showingModes,
                                                 SHOWING_MODE_DEFAULT)
@@ -143,7 +141,11 @@ class MaterialKalendar
 
         adapter = KalendarMonthPagerAdapter(this@MaterialKalendar).apply {
             setShowingDatesMode(showingDateFlagModes)
+            weekLabelsArray?.let {
+                setWeekDayFormatter(ArrayKalendarWeekDayDateFormatter(it))
+            } ?: setWeekDayFormatter(KalendarWeekDayDateFormatter())
         }
+
         pager = KalendarPager(context).apply {
             addOnPageChangeListener(pageChangeListener)
             pageMargin = 16.dpToPx()
@@ -302,8 +304,8 @@ class MaterialKalendar
         adapter.setShowingDatesMode(flagsMode)
     }
 
-    fun setWeekDayFormatter(formatter: DateFormatter<DayOfWeek>?) {
-        adapter.setWeekDayFormatter(formatter ?: KalendarWeekDayDateFormatter())
+    fun setWeekDayFormatter(formatter: DateFormatter<DayOfWeek>) {
+        adapter.setWeekDayFormatter(formatter)
     }
 
     fun setAllowClickDaysOutsideCurrentMonth(enable: Boolean) {

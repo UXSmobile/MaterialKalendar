@@ -26,6 +26,7 @@
         app:mk_firstDayOfWeek="monday"
         app:mk_showWeekDayLabels="true"
         app:mk_showingModes="standard"
+        app:mk_weekDayLabels="@array/weekDaysCalendar"
         />
 
     <TextView
