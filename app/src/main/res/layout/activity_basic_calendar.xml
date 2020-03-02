@@ -1,62 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@drawable/bg_riders_blur"
-              android:orientation="vertical">
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/monthYearTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="16dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textStyle="bold"
-        android:textColor="@android:color/white"
-        />
-
-    <com.uxsmobile.materialkalendar.presentation.ui.MaterialKalendar
-        android:id="@+id/calendarView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:mk_allowClickDaysOutsideCurrentMonth="true"
-        app:mk_allowDynamicWeeksHeightResize="false"
-        app:mk_firstDayOfWeek="monday"
-        app:mk_showWeekDayLabels="true"
-        app:mk_showingModes="standard"
-        app:mk_weekDayLabels="@array/weekDaysCalendar"
-        />
+        android:background="@drawable/bg_riders_blur"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/dateTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/space_16dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@android:color/white"
-        />
+        <TextView
+            android:id="@+id/monthYearTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/scrollCurrentDay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Scroll Current Day"
-        android:layout_margin="@dimen/space_16dp"
-        android:layout_gravity="center"/>
+        <com.uxsmobile.materialkalendar.presentation.ui.MaterialKalendar
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:mk_allowClickDaysOutsideCurrentMonth="true"
+            app:mk_allowDynamicWeeksHeightResize="false"
+            app:mk_firstDayOfWeek="monday"
+            app:mk_showWeekDayLabels="true"
+            app:mk_showingModes="standard"
+            app:mk_weekDayLabels="@array/weekDaysCalendar" />
 
-    <CheckBox
-        android:id="@+id/disableNextOnMonthChangedTrigger"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:buttonTint="@android:color/white"
-        android:paddingStart="@dimen/space_8dp"
-        android:layout_margin="@dimen/space_8dp"
-        android:text="Disable Next OnMonthChanged Trigger"
-        android:textAllCaps="true"
-        android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/dateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/space_16dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/scrollCurrentDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/space_16dp"
+            android:text="Scroll Current Day" />
+
+        <CheckBox
+            android:id="@+id/disableNextOnMonthChangedTrigger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/space_8dp"
+            android:buttonTint="@android:color/white"
+            android:paddingStart="@dimen/space_8dp"
+            android:text="Disable Next OnMonthChanged Trigger"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+
+</ScrollView>

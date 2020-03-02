@@ -8,11 +8,7 @@ import com.uxsmobile.materialkalendar.data.KalendarDay
 import com.uxsmobile.materialkalendar.data.KalendarMonthlyAggregation
 import com.uxsmobile.materialkalendar.presentation.ui.MaterialKalendar
 import com.uxsmobile.materialkalendar.presentation.ui.common.formatter.KalendarDayMonthYearDateFormatter
-import kotlinx.android.synthetic.main.activity_basic_calendar.calendarView
-import kotlinx.android.synthetic.main.activity_basic_calendar.dateTextView
-import kotlinx.android.synthetic.main.activity_basic_calendar.disableNextOnMonthChangedTrigger
-import kotlinx.android.synthetic.main.activity_basic_calendar.monthYearTextView
-import kotlinx.android.synthetic.main.activity_basic_calendar.scrollCurrentDay
+import kotlinx.android.synthetic.main.activity_basic_calendar.*
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.Locale
 
@@ -55,7 +51,6 @@ class BasicCalendarTestActivity: AppCompatActivity() {
         AndroidThreeTen.init(this)
         setContentView(R.layout.activity_basic_calendar)
 
-        calendarView.setCalendarBounds(KalendarDay.from(2018, 1, 4), KalendarDay.from(2019, 12, 20))
         calendarView.setOnDateChangedListener(object : MaterialKalendar.OnDateSelectedListener {
             override fun onDateSelected(widget: MaterialKalendar, date: KalendarDay, isDaySelected: Boolean) {
                 dateTextView.text = widget.selectedDay?.date?.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.getDefault())) ?: "--- Not Selected ---"
@@ -68,6 +63,7 @@ class BasicCalendarTestActivity: AppCompatActivity() {
                 monthYearTextView.text = monthYearFormatter.format(date)
             }
         })
+        calendarView.scrollToDate(KalendarDay.from(2019,12,12), false)
 
         dateTextView.text = calendarView.selectedDay?.date?.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.getDefault()))
         calendarView.selectedDay?.let { monthYearTextView.text = monthYearFormatter.format(it) }
