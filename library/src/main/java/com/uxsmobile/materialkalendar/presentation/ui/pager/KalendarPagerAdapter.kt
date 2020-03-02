@@ -31,8 +31,10 @@ internal abstract class KalendarPagerAdapter<V : KalendarPagerView> : PagerAdapt
     private var rangeIndex: DateRangeIndex? = null
 
     init {
-        setRangeDates(KalendarDay.from(today.date.year - 2, today.date.monthValue, today.date.dayOfMonth),
-                      KalendarDay.from(today.date.year + 2, today.date.monthValue, today.date.dayOfMonth))
+        setRangeDates(
+            KalendarDay.from(today.date.minusYears(2)),
+            KalendarDay.from(today.date.plusYears(2))
+        )
     }
 
     override fun getCount(): Int = rangeIndex?.count ?: 0
