@@ -1,6 +1,6 @@
 package com.uxsmobile.materialkalendar.presentation.ui.pager
 
-import android.support.v4.view.PagerAdapter
+import androidx.viewpager.widget.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
 import com.uxsmobile.materialkalendar.data.KalendarDay
@@ -18,7 +18,7 @@ import org.threeten.bp.DayOfWeek
  * Copyright © 2018 UXS Mobile. All rights reserved.
  */
 @Suppress("UNCHECKED_CAST")
-internal abstract class KalendarPagerAdapter<V : KalendarPagerView> : PagerAdapter() {
+internal abstract class KalendarPagerAdapter<V : KalendarPagerView> : androidx.viewpager.widget.PagerAdapter() {
 
     private val currentViews = arrayListOf<V>()
     private val today = KalendarDay.today()
@@ -42,7 +42,7 @@ internal abstract class KalendarPagerAdapter<V : KalendarPagerView> : PagerAdapt
     override fun getItemPosition(obj: Any): Int {
         val index = indexOf(obj as V)
         return if (index < 0) {
-            PagerAdapter.POSITION_NONE
+            androidx.viewpager.widget.PagerAdapter.POSITION_NONE
         } else index
     }
 

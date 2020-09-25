@@ -1,7 +1,7 @@
 package com.uxsmobile.materialkalendar
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.uxsmobile.materialkalendar.app.random
 import com.uxsmobile.materialkalendar.data.KalendarDay

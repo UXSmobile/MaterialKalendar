@@ -27,13 +27,13 @@ androidExtensions {
 dependencies {
     implementation rootProject.ext.kotlin
 
-    implementation rootProject.ext.supportV4
-    implementation rootProject.ext.supportAppCompat
-    implementation rootProject.ext.supportAnnotations
+    implementation rootProject.ext.androidXDesign
+    implementation rootProject.ext.androidXAppCompat
+    implementation rootProject.ext.androidXAnnotations
 
     implementation rootProject.ext.threeTenAbp
     implementation rootProject.ext.mpAndroidChart
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
 
     rootProject.ext.testDep.each { testImplementation it }
     rootProject.ext.androidTestDep.each { androidTestImplementation it }
@@ -44,13 +44,5 @@ private Integer generateVersionCode() {
 }
 
 private String generateVersionName() {
-    String versionName = "${rootProject.ext.versionMajor}.${rootProject.ext.versionMinor}.${rootProject.ext.versionPatch}"
-    if (rootProject.ext.versionClassifier == null && rootProject.ext.isSnapshot) {
-        rootProject.ext.versionClassifier = "SNAPSHOT"
-    }
-
-    if (rootProject.ext.versionClassifier != null) {
-        versionName += "-" + rootProject.ext.versionClassifier
-    }
-    return versionName
+    return "${rootProject.ext.versionMajor}.${rootProject.ext.versionMinor}.${rootProject.ext.versionPatch}"
 }

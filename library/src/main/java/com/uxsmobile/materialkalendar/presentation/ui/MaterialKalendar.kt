@@ -1,8 +1,8 @@
 package com.uxsmobile.materialkalendar.presentation.ui
 
 import android.content.Context
-import android.support.annotation.IntDef
-import android.support.v4.view.ViewPager
+import androidx.annotation.IntDef
+import androidx.viewpager.widget.ViewPager
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +20,7 @@ import com.uxsmobile.materialkalendar.presentation.ui.pager.KalendarPagerView.Co
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.temporal.WeekFields
 import java.util.Locale
+import kotlin.math.min
 
 /**
  * @author   Daniel Manrique Lucas <dmanluc91@gmail.com>
@@ -51,11 +52,11 @@ class MaterialKalendar
     @Retention(AnnotationRetention.SOURCE)
     annotation class ShowingDateModes
 
-    private val pageChangeListener = object : ViewPager.OnPageChangeListener {
+    private val pageChangeListener = object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
         override fun onPageScrollStateChanged(state: Int) {
             pagerScrollState = state
             pagerScrollState.let {
-                if (it == ViewPager.SCROLL_STATE_IDLE) {
+                if (it == androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE) {
                     if (triggerOnMonthChanged) dispatchOnMonthChanged(adapter.getItem(pager.currentItem)) else triggerOnMonthChanged = true
                 }
             }
@@ -125,8 +126,6 @@ class MaterialKalendar
             showingDateFlagModes = a.getInteger(R.styleable.MaterialKalendar_mk_showingModes,
                                                 SHOWING_MODE_DEFAULT)
 
-            //setWeekDayTextAppearance(a.getResourceId(R.styleable.MaterialKalendar_mk_weekDayTextAppearance, R.style.TextAppearance_MaterialKalendarWidget_WeekDay))
-
             setAllowClickDaysOutsideCurrentMonth(
                     a.getBoolean(R.styleable.MaterialKalendar_mk_allowClickDaysOutsideCurrentMonth, true))
             setAllowDynamicWeeksHeightResize(
@@ -160,10 +159,10 @@ class MaterialKalendar
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val specWidthSize = View.MeasureSpec.getSize(widthMeasureSpec)
-        val specWidthMode = View.MeasureSpec.getMode(widthMeasureSpec)
-        val specHeightSize = View.MeasureSpec.getSize(heightMeasureSpec)
-        val specHeightMode = View.MeasureSpec.getMode(heightMeasureSpec)
+        val specWidthSize = MeasureSpec.getSize(widthMeasureSpec)
+        val specWidthMode = MeasureSpec.getMode(widthMeasureSpec)
+        val specHeightSize = MeasureSpec.getSize(heightMeasureSpec)
+        val specHeightMode = MeasureSpec.getMode(heightMeasureSpec)
 
         val desiredWidth = specWidthSize - paddingLeft - paddingRight
         val desiredHeight = specHeightSize - paddingTop - paddingBottom
@@ -188,13 +187,13 @@ class MaterialKalendar
             } else {
                 desiredTileHeight
             }
-        } else if (specWidthMode == View.MeasureSpec.EXACTLY || specWidthMode == View.MeasureSpec.AT_MOST) {
-            measureTileSize = if (specHeightMode == View.MeasureSpec.EXACTLY) {
+        } else if (specWidthMode == MeasureSpec.EXACTLY || specWidthMode == MeasureSpec.AT_MOST) {
+            measureTileSize = if (specHeightMode == MeasureSpec.EXACTLY) {
                 Math.min(desiredTileWidth, desiredTileHeight)
             } else {
                 desiredTileWidth
             }
-        } else if (specHeightMode == View.MeasureSpec.EXACTLY || specHeightMode == View.MeasureSpec.AT_MOST) {
+        } else if (specHeightMode == MeasureSpec.EXACTLY || specHeightMode == MeasureSpec.AT_MOST) {
             measureTileSize = desiredTileHeight
         }
 
@@ -221,11 +220,11 @@ class MaterialKalendar
         (0 until childCount).map { getChildAt(it) }.forEach { child ->
             val childWidthMeasureSpec = View.MeasureSpec.makeMeasureSpec(
                     DEFAULT_DAYS_IN_WEEK * measureTileWidth,
-                    View.MeasureSpec.EXACTLY)
+                    MeasureSpec.EXACTLY)
 
             val childHeightMeasureSpec = View.MeasureSpec.makeMeasureSpec(
                     child.layoutParams.height * (measureTileHeight + 8.dpToPx()),
-                    View.MeasureSpec.EXACTLY)
+                    MeasureSpec.EXACTLY)
 
             child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
         }
@@ -342,11 +341,11 @@ class MaterialKalendar
         monthChangedListener = null
     }
 
-    fun addOnCalendarPageScrollChangeListener(listener: ViewPager.OnPageChangeListener) {
+    fun addOnCalendarPageScrollChangeListener(listener: androidx.viewpager.widget.ViewPager.OnPageChangeListener) {
         pager.addOnPageChangeListener(listener)
     }
 
-    fun removeOnCalendarPageScrollChangeListener(listener: ViewPager.OnPageChangeListener) {
+    fun removeOnCalendarPageScrollChangeListener(listener: androidx.viewpager.widget.ViewPager.OnPageChangeListener) {
         pager.removeOnPageChangeListener(listener)
     }
 
@@ -433,16 +432,16 @@ class MaterialKalendar
     }
 
     private fun clampSize(size: Int, spec: Int): Int {
-        val specMode = View.MeasureSpec.getMode(spec)
-        val specSize = View.MeasureSpec.getSize(spec)
+        val specMode = MeasureSpec.getMode(spec)
+        val specSize = MeasureSpec.getSize(spec)
         return when (specMode) {
-            View.MeasureSpec.EXACTLY -> {
+            MeasureSpec.EXACTLY -> {
                 specSize
             }
-            View.MeasureSpec.AT_MOST -> {
-                Math.min(size, specSize)
+            MeasureSpec.AT_MOST -> {
+                min(size, specSize)
             }
-            View.MeasureSpec.UNSPECIFIED -> {
+            MeasureSpec.UNSPECIFIED -> {
                 size
             }
             else -> {

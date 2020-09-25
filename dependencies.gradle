@@ -1,26 +1,23 @@
 ext {
     minSdkVersion = 21
-    compileSdkVersion = 28
-    targetSdkVersion = 28
+    compileSdkVersion = 30
+    targetSdkVersion = 30
     versionMajor = 1
     versionMinor = 0
     versionPatch = 9
-    versionClassifier = null
-    isSnapshot = true
 
-    junitVersion = '4.12'
+    junitVersion = '4.13'
     runnerVersion = '1.0.2'
-    supportVersion = '28.0.0'
-    threeTenAbp = '1.1.0'
-    mpAndroidChart = '3.0.3'
+    androidX = '1.1.0'
+    threeTenAbp = '1.2.4'
+    mpAndroidChart = '3.1.0'
 
     kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.ext.kotlin_version"
 
-    supportV4 = "com.android.support:support-v4:$supportVersion"
-    supportDesign = "com.android.support:design:$supportVersion"
-    supportAnnotations = "com.android.support:support-annotations:$supportVersion"
-    supportAppCompat = "com.android.support:appcompat-v7:$supportVersion"
-    recyclerviewV7 = "com.android.support:recyclerview-v7:$supportVersion"
+    androidXDesign = "com.google.android.material:material:$androidX"
+    androidXAnnotations = "androidx.annotation:annotation:$androidX"
+    androidXAppCompat = "androidx.appcompat:appcompat:1.2.0"
+    recyclerviewV7 = "androidx.recyclerview:recyclerview:$androidX"
 
     // Test
     junit = "junit:junit:$junitVersion"

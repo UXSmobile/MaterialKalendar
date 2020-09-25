@@ -15,7 +15,7 @@ fun Int.pxToDp(): Int = (this / Resources.getSystem().displayMetrics.density).to
 
 fun Int.dpToPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 
-fun IntRange.random() = Random().nextFloat() * (this.endInclusive - this.start) + this.start
+fun IntRange.random(): Float = Random().nextFloat() * (this.last - this.first) + this.first
 
 fun <T1 : Any, T2 : Any, R : Any> safeLet(p1: T1?, p2: T2?, block: (T1, T2) -> R?): R? =
         if (p1 != null && p2 != null) block(p1, p2) else null

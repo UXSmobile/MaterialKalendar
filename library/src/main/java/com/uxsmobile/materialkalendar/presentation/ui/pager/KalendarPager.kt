@@ -2,7 +2,7 @@ package com.uxsmobile.materialkalendar.presentation.ui.pager
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.support.v4.view.ViewPager
+import androidx.viewpager.widget.ViewPager
 import android.util.AttributeSet
 import android.view.MotionEvent
 
@@ -13,7 +13,7 @@ import android.view.MotionEvent
  *
  * Copyright © 2018 UXS Mobile. All rights reserved.
  */
-internal class KalendarPager: ViewPager {
+internal class KalendarPager: androidx.viewpager.widget.ViewPager {
 
     var pagingEnabled = true
 

@@ -3,7 +3,7 @@ package com.uxsmobile.materialkalendar.presentation.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.support.v7.widget.AppCompatTextView
+import androidx.appcompat.widget.AppCompatTextView
 import android.view.Gravity
 import android.view.View
 import com.uxsmobile.materialkalendar.presentation.ui.common.formatter.DateFormatter

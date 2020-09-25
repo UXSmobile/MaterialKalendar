@@ -4,10 +4,10 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.ResolveInfo
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,10 +32,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         recyclerView.apply {
-            val layoutHandler = LinearLayoutManager(this@MainActivity)
+            val layoutHandler = androidx.recyclerview.widget.LinearLayoutManager(this@MainActivity)
             layoutManager = layoutHandler
             adapter = ResolveInfoAdapter(getAllSampleActivities())
-            addItemDecoration(DividerItemDecoration(this@MainActivity, layoutHandler.orientation))
+            addItemDecoration(androidx.recyclerview.widget.DividerItemDecoration(this@MainActivity, layoutHandler.orientation))
         }
     }
 
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     inner class ResolveInfoAdapter(private val samples: List<ResolveInfo>) :
-            RecyclerView.Adapter<ResolveInfoAdapter.ResolveInfoViewHolder>() {
+            androidx.recyclerview.widget.RecyclerView.Adapter<ResolveInfoAdapter.ResolveInfoViewHolder>() {
 
         private val layoutInflater = LayoutInflater.from(this@MainActivity)
         private val packageManager = this@MainActivity.packageManager
@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: ResolveInfoViewHolder, position: Int) = holder.bindHolder(
                 samples[position].loadLabel(packageManager).toString())
 
-        inner class ResolveInfoViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+        inner class ResolveInfoViewHolder(private val view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
 
             init {
                 view.setOnClickListener {

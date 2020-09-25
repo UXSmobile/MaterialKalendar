@@ -2,8 +2,8 @@ package com.uxsmobile.materialkalendar
 
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Legend
@@ -13,6 +13,7 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.uxsmobile.materialkalendar.app.random
 import com.uxsmobile.materialkalendar.data.KalendarDay
@@ -33,7 +34,6 @@ class BasicMonthlyBarChartTestActivity : AppCompatActivity() {
     private val colorResources = listOf(com.uxsmobile.library.R.color.bar_chart_incomes_type,
                                         com.uxsmobile.library.R.color.bar_chart_expenses_type,
                                         com.uxsmobile.library.R.color.bar_chart_expected_type)
-    private val dateMonthFormatter: DateFormatter<KalendarDay> = KalendarDayMonthDateFormatter()
 
 
     private lateinit var dataSetsBarChart: Triple<LinkedHashMap<KalendarDay, Double>, LinkedHashMap<KalendarDay, Double>, LinkedHashMap<KalendarDay, Double>>
@@ -57,32 +57,22 @@ class BasicMonthlyBarChartTestActivity : AppCompatActivity() {
         monthlyBarChart.apply {
             setDrawBorders(false)
             setDrawGridBackground(false)
-            //            setScaleEnabled(false)
-            //            setTouchEnabled(false)
-            //            isDragEnabled = false
-            //            setPinchZoom(false)
             isScrollContainer = true
-            //            //axisLeft.setDrawLabels(false)
             axisLeft.setDrawAxisLine(false)
             axisLeft.setDrawGridLines(false)
             axisLeft.xOffset = 16f
             axisLeft.textColor = Color.WHITE
-            //            axisLeft.spaceTop = 0f
-            //            axisLeft.axisMaximum = 1f
             axisLeft.granularity = 1000f
             axisLeft.axisMinimum = 0f
             axisRight.setDrawLabels(false)
             axisRight.setDrawAxisLine(false)
             axisRight.setDrawGridLines(false)
-            //            xAxis.setDrawLabels(false)
             xAxis.setDrawAxisLine(false)
             xAxis.setDrawGridLines(false)
             xAxis.isGranularityEnabled = true
             xAxis.granularity = 1f
             xAxis.textColor = Color.WHITE
-            //            legend.isEnabled = false
             description.isEnabled = false
-            //            setViewPortOffsets(0f, 0f, 0f, 0f)
             xAxis.position = XAxis.XAxisPosition.BOTTOM
         }
     }
@@ -109,22 +99,18 @@ class BasicMonthlyBarChartTestActivity : AppCompatActivity() {
             monthlyBarChart.apply {
                 xAxis.axisMinimum = 0f
                 xAxis.axisMaximum = barChartValues.first.keys.toList().size.toFloat()
-                xAxis.valueFormatter = IAxisValueFormatter { value, axis ->
-                    if (Math.abs(value.toInt()) <= xAxis.axisMaximum - 1) {
-                        dateMonthFormatter.format(barChartValues.first.keys.toList()[Math.abs(value.toInt())]).toString()
-                    } else {
-                        ""
-                    }
-                }
+                xAxis.valueFormatter = XAxisValueFormatter(barChartValues)
                 setVisibleXRangeMaximum(0f + barData.getGroupWidth(groupSpace, barSpace) * groupCount)
                 moveViewToX(0f)
                 groupBars(0f, groupSpace, barSpace)
                 xAxis.setCenterAxisLabels(true)
+                extraBottomOffset = 12f
 
                 legend.apply {
-                    formSize = 10f; // set the size of the legend forms/shapes
-                    form = Legend.LegendForm.CIRCLE; // set what type of form/shape should be used
-                    position = Legend.LegendPosition.BELOW_CHART_CENTER;
+                    formSize = 10f // set the size of the legend forms/shapes
+                    form = Legend.LegendForm.CIRCLE // set what type of form/shape should be used
+                    verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+                    horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
                     textSize = 10f
                     textColor = Color.WHITE
                     xEntrySpace = 15f
@@ -141,7 +127,7 @@ class BasicMonthlyBarChartTestActivity : AppCompatActivity() {
                 }
             }
             visibility = View.VISIBLE
-            animateY(500, Easing.EasingOption.EaseOutBounce)
+            animateY(500, Easing.EaseOutBounce)
         }
     }
 
