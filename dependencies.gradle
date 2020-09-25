@@ -3,8 +3,8 @@ ext {
     compileSdkVersion = 30
     targetSdkVersion = 30
     versionMajor = 1
-    versionMinor = 0
-    versionPatch = 9
+    versionMinor = 1
+    versionPatch = 0
 
     junitVersion = '4.13'
     runnerVersion = '1.0.2'
