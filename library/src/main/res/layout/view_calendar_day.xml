@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:id="@+id/rootDayView"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             android:background="@drawable/layout_border"
+                                             android:orientation="vertical"
+                                             android:paddingTop="@dimen/space_2dp">
+
+
+    <TextView
+        android:id="@+id/dayNumber"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/space_2dp"
+        android:paddingStart="@dimen/space_6dp"
+        android:paddingEnd="@dimen/space_6dp"
+        android:textColor="@android:color/white"
+        app:autoSizeMaxTextSize="22sp"
+        app:autoSizeMinTextSize="14sp"
+        app:autoSizeStepGranularity="1sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toTopOf="@id/dayMovementsBarChart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="24"/>
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/dayMovementsBarChart"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dayNumber"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

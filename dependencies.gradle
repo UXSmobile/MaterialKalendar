@@ -1,0 +1,36 @@
+ext {
+    minSdkVersion = 21
+    compileSdkVersion = 30
+    targetSdkVersion = 30
+    versionMajor = 1
+    versionMinor = 1
+    versionPatch = 0
+
+    junitVersion = '4.13'
+    runnerVersion = '1.0.2'
+    androidX = '1.1.0'
+    threeTenAbp = '1.2.4'
+    mpAndroidChart = '3.1.0'
+
+    kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.ext.kotlin_version"
+
+    androidXDesign = "com.google.android.material:material:$androidX"
+    androidXAnnotations = "androidx.annotation:annotation:$androidX"
+    androidXAppCompat = "androidx.appcompat:appcompat:1.2.0"
+    recyclerviewV7 = "androidx.recyclerview:recyclerview:$androidX"
+
+    // Test
+    junit = "junit:junit:$junitVersion"
+    testRunner = "com.android.support.test:runner:$runnerVersion"
+    testRules = "com.android.support.test:rules:$runnerVersion"
+
+    // Other
+    threeTenAbp = "com.jakewharton.threetenabp:threetenabp:$threeTenAbp"
+    mpAndroidChart = "com.github.PhilJay:MPAndroidChart:v$mpAndroidChart"
+
+    testDep = [junit]
+
+    androidTestDep = [junit,
+                      testRunner,
+                      testRules]
+}

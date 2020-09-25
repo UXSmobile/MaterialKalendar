@@ -1,2 +1,2 @@
 # MaterialKalendar
-UXS material calendar for EVO BMI Android project
+UXS material calendar for Android projects

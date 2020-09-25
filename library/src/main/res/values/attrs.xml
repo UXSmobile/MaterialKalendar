@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="MaterialKalendar">
+
+        <attr name="mk_dayTextAppearance" format="reference"/>
+        <attr name="mk_weekDayTextAppearance" format="reference"/>
+
+        <attr name="mk_showingModes" format="integer">
+            <flag name="standard" value="1"/>
+            <flag name="non_current_months" value="2"/>
+            <flag name="out_of_calendar_date_range" value="4"/>
+            <flag name="all" value="7"/>
+        </attr>
+
+        <attr name="mk_allowClickDaysOutsideCurrentMonth" format="boolean"/>
+        <attr name="mk_allowDynamicWeeksHeightResize" format="boolean"/>
+
+        <attr name="mk_showWeekDayLabels" format="boolean"/>
+        <attr name="mk_weekDayLabels" format="reference"/>
+
+        <attr name="mk_firstDayOfWeek" format="enum">
+            <enum name="monday" value="1"/>
+            <enum name="tuesday" value="2"/>
+            <enum name="wednesday" value="3"/>
+            <enum name="thursday" value="4"/>
+            <enum name="friday" value="5"/>
+            <enum name="saturday" value="6"/>
+            <enum name="sunday" value="7"/>
+        </attr>
+
+        <attr name="mk_tileSize" format="dimension">
+            <enum name="match_parent" value="-1"/>
+        </attr>
+        <attr name="mk_tileHeight" format="dimension">
+            <enum name="match_parent" value="-1"/>
+        </attr>
+        <attr name="mk_tileWidth" format="dimension">
+            <enum name="match_parent" value="-1"/>
+        </attr>
+
+    </declare-styleable>
+
+</resources>
