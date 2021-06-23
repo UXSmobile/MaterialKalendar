@@ -1,2 +1,2 @@
 # MaterialKalendar
-UXS material calendar for Android projects
+Material calendar for Android projects
